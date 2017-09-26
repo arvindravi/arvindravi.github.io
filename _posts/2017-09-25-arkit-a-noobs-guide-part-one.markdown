@@ -41,7 +41,7 @@ Let’s get right into it. There are a few ARKit-ty stuff (_more like classes, b
 - ARAnchor
 - ARPlaneAnchor
 
-##### ARWorldTrackingConfiguration
+#### <b>ARWorldTrackingConfiguration</b>
 
 The **ARConfiguration** class  deals with establishing a relationship between the real world where the device is, and the virtual co-ordinate space where content can be modelled. The **ARWorldTrackingConfiguration** class is a subclass of ARConfiguration, and this is responsible for tracking the device’s movement with six degrees of freedom (_6DOF_). 
 The six degrees of freedom represent the freedom of movement of an object in three-dimensional space, like so:
@@ -69,7 +69,7 @@ Let’s now get to initialising an ARWorldTrackingConfiguration object, that we 
 let configuration = ARWorldTrackingConfiguration()
 {% endhighlight %}
 
-##### ARSession
+#### <b>ARSession</b>
 Every AR experience built with ARKit, relies on a ARSession object to manage the session. This object co-ordinates with your device’s camera, the motion sensors, and performs image analysis on the capture frames.
 
 The building block of an AR experience, is the **ARSession**, and it’s the session is run with a {session configuration} object.
@@ -91,7 +91,7 @@ let session = ARSession()
 session.run(configuration)
 {% endhighlight %}
 
-##### ARSCNView
+#### <b>ARSCNView</b>
 If you’re already familiar with SceneKit, the **ARSCNView** is a subclass of **SCNView** that comes with all what you need to setup an AR experience using SceneKit.
 
 ARSCNView is used to display a camera and any 3D content that you will be adding to your scene. Pretty much, the view port of your AR experience.
@@ -112,12 +112,12 @@ let session = ARSession() 
 sceneView.session = session
 {% endhighlight %}
 
-##### ARAnchor
-Once you know the fundamentals of how to run an ARSession, let’s see what you can do with a running ARSession. You can add stuff to it. I mean, anything. Even 3D 💩, and Craig would even [appreciate] it.
+#### <b>ARAnchor</b>
+Once you know the fundamentals of how to run an ARSession, let’s see what you can do with a running ARSession. You can add stuff to it. I mean, anything. Even 3D 💩, and Craig would even [appreciate](https://youtu.be/ap8NuYWmFh0?t=2m6s) it.
 
 There’s a concept of anchors in a session, it’s not rocket science — you basically add anchor objects to a AR session that’s running, and your device tracks its position and orientation of whatever you add to the session. Let’s go over how to create an ARAnchor object and add it to a session.
 
-However, to create an AR Anchor, you need a matrix that encodes the position, orientation, and scale of the anchor relative to the world co-ordinate space of the session the anchor is in. That sounds tricky? A little. But all you need to understand is, that this matrix is of the type**matrix\_float4x4** in Swift. 
+However, to create an AR Anchor, you need a matrix that encodes the position, orientation, and scale of the anchor relative to the world co-ordinate space of the session the anchor is in. That sounds tricky? A little. But all you need to understand is, that this matrix is of the type `matrix_float4x4` in Swift. 
 
 This value can be obtained based on where you want to place your anchor, one of the ways is to grab the **ARCamera**’s transform property and bind that to the anchor, to place an anchor in front of the camera.
 
@@ -144,7 +144,7 @@ sceneView.session.add(anchor: anchor)
 
 Yes, it’s as simple as that.
 	
-##### ARPlaneAnchor
+#### <b>ARPlaneAnchor</b>
 The **ARPlaneAnchor** is a subclass of an **ARAnchor**, with one cool fact — 
 
 _ARPlaneAnchor objects get added to the session automatically when plane detection is enabled._
@@ -156,11 +156,11 @@ An ARPlaneAnchor has some useful properties:
 - `center`
 - `extent`
 
-These properties help place 3D planes to the scene when plane surfaces are detected. Yes, really.
+These properties help place 3D planes to the scene when plane surfaces are detected.
 
 ----
 <br>
-### Moving on
+#### <b>Moving on</b>
 I’ve tried to put together the fundamentals of **ARKit** in this part, and we’ll be going over more ARKit-y stuff in the coming parts. In the next part we’ll be discussing how to detect plane surfaces.
 
 Index of the whole series of ARKit posts:
