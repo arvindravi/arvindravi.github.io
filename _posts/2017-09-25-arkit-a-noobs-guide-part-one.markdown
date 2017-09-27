@@ -60,7 +60,7 @@ You can count, there are six.
 
 Let’s now get to initialising an ARWorldTrackingConfiguration object, that we can create an ARSession with.
 
-> Pro-tip: When initialising a **ARWorldTrackingConfiguration**, you can optionally set a boolean property called `planeDetection` to `true` to enable plane detection in your session.
+> Pro-tip: When initialising an **ARWorldTrackingConfiguration**, you can optionally set `.horizontal` to a property called `planeDetection` to enable plane detection in your session.
 
 **Code**
 - Instantiating a session configuration
@@ -166,7 +166,7 @@ I’ve tried to put together the fundamentals of **ARKit** in this part, and we�
 Index of the whole series of ARKit posts:
 (I’ll update the links here as they’re ready, but for now feel free to leave any feedback. 🤓)
 - Part I: Introducing ARKit
-- Part II: Detecting Planes
+- [Part II: Detecting Planes](../posts/arkit-a-noobs-guide-part-two)
 - Part III: Adding 3D content to your scene
 - Part IV: Lighting with SceneKit
 
