@@ -167,7 +167,7 @@ Index of the whole series of ARKit posts:
 (I’ll update the links here as they’re ready, but for now feel free to leave any feedback. 🤓)
 - Part I: Introducing ARKit
 - [Part II: Detecting Planes](../posts/arkit-a-noobs-guide-part-two)
-- Part III: Adding 3D content to your scene
+- [Part III: Adding 3D objects](../posts/arkit-a-noobs-guide-part-three)
 - Part IV: Lighting with SceneKit
 
 That's all folks.
