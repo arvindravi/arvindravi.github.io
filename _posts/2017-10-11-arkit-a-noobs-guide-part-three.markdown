@@ -2,7 +2,7 @@
 title: "ARKit: A Noob's Guide - Part III"
 layout: post
 date: 2017-10-11
-tags: Swift ARKit
+tags: swift
 ---
 ### Part III: Adding 3D Objects 📦
 

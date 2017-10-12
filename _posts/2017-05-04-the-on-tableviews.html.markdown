@@ -2,7 +2,7 @@
 title: 'On Tableviews'
 layout: post
 date: 2017-05-04
-tags: iOS TableViews
+tags: swift
 ---
 
 You’re always trying to show tables of something to people. Always.

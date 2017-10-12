@@ -1,6 +1,6 @@
 ---
 title: "Architecting Software: The Whats and The Whys"
-tags: software architecture, startups
+tags: software
 layout: post
 date: 2017-07-25
 ---

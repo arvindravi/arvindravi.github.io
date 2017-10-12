@@ -2,7 +2,7 @@
 title: "ARKit: A Noob's Guide - Part I"
 layout: post
 date: 2017-09-24
-tags: Swift ARKit
+tags: swift
 ---
 ## Part I: Introducing ARKit 🔮
 ARKit is the new kid on the block. It’s the shiny new Apple’s framework on the iOS Platform to develop Augmented Reality apps and games. Its pretty cool actually. I will try to not bore you to death and tell you things you need to  know. 
