@@ -163,11 +163,10 @@ These properties help place 3D planes to the scene when plane surfaces are detec
 #### <b>Moving on</b>
 I’ve tried to put together the fundamentals of **ARKit** in this part, and we’ll be going over more ARKit-y stuff in the coming parts. In the next part we’ll be discussing how to detect plane surfaces.
 
-Index of the whole series of ARKit posts:
-(I’ll update the links here as they’re ready, but for now feel free to leave any feedback. 🤓)
-- Part I: Introducing ARKit
+Index of the series of ARKit posts:
+- [Part I: Introducing ARKit](../posts/arkit-a-noobs-guide-part-one)
 - [Part II: Detecting Planes](../posts/arkit-a-noobs-guide-part-two)
-- [Part III: Adding 3D objects](../posts/arkit-a-noobs-guide-part-three)
-- Part IV: Lighting with SceneKit
+- [Part III: Adding 3D content to your scene](../posts/arkit-a-noobs-guide-part-three)
+- [Part IV: Lighting with SceneKit](../posts/arkit-a-noobs-guide-part-four)
 
 That's all folks.

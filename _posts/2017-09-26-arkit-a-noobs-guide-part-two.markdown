@@ -2,7 +2,7 @@
 title: 'ARKit: A Noobs Guide - Part II'
 layout: post
 date: 2017-09-27
-tags: swift
+tags: Swift ARKit
 ---
 ### Part II: Detecting Planes 🛫
 
@@ -174,9 +174,9 @@ You should pretty much be able to write an AR app that detects flat surfaces aro
 
 Index of the series of ARKit posts:
 - [Part I: Introducing ARKit](../posts/arkit-a-noobs-guide-part-one)
-- Part II: Detecting Planes
-- Part III: Adding 3D content to your scene
-- Part IV: Lighting with SceneKit
+- [Part II: Detecting Planes](../posts/arkit-a-noobs-guide-part-two)
+- [Part III: Adding 3D content to your scene](../posts/arkit-a-noobs-guide-part-three)
+- [Part IV: Lighting with SceneKit](../posts/arkit-a-noobs-guide-part-four)
 
 That's all folks.
 

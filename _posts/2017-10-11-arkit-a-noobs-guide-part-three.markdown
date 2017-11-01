@@ -8,7 +8,7 @@ tags: swift
 
 In parts [one](../posts/arkit-a-noobs-guide-part-one) and [two](../posts/arkit-a-noobs-guide-part-two), we went through how to get started with ARKit, and detect plane surfaces around you. What good is just doing that, you ask?
 
-### Hi, SceneKit.
+#### **Hi, SceneKit.**
 On iOS, there are two ways to work with 3D:
 - SceneKit
 - Metal
@@ -18,7 +18,7 @@ On iOS, there are two ways to work with 3D:
 **Metal** is a low-level API to the GPU-accelerated hardware on Apple devices. It is designed to be extremely efficient on Apple hardware. Although not the easiest to deal with if you’re looking to render simple 3D without GPU-acceleration.
 
 Let’s deal with SceneKit to add 3D objects to our scene.
-### Anchory Sessions
+#### **Anchory Sessions**
 You should be familiar with setting up an AR Session by now. The fundamental concept behind adding 3D objects to an AR Session is adding Anchors to the scene and have the device track the anchors inside of the AR Session.
 
 The AR Session object in your View Controller can be used to add anchors to your session. Like so:
@@ -29,7 +29,7 @@ session.add(anchor: ARAnchor)
 
 An AR Anchor is the real-world position and orientation that can be used for placing objects in an AR scene. When plane detection is enabled, ARKit adds ARAnchor (more specifically ARPlaneAnchor) objects to the session.
 
-### SceneKit, meet ARKit
+#### **SceneKit, meet ARKit**
 There are two ways to add 3D content to your session:
 - SCNView’s child node
 - ARAnchor
@@ -40,7 +40,7 @@ Any 3D content modeled with SceneKit can be used with ARKit. ARKit makes this ea
 
 Let’s use SceneKit to create a simple cube and see how each of the methods to add 3D content works.
 
-#### Creating a Cube
+##### Creating a Cube
 
 If you’re new to SceneKit, here’s what you need to know to create 3D content:
 
@@ -59,7 +59,7 @@ let cube = SCNNode(geometry: boxGeometry)
 
 It’s as simple as that.
 
-#### Adding 3D geometry to the AR Session
+##### Adding 3D geometry to the AR Session
 Now that we have our `cube` we’ll look into how to add it to our scene.
 
 Like I mentioned earlier, there are two ways to add 3D content to an AR session.  But before we jump into how we do that, we need a position for the 3D content that you want to place. Let’s get to that.
@@ -70,12 +70,12 @@ Since we’re dealing with 3D space, there are two choices that we have to place
 
 With SceneKit, a position of an object in the world is denoted with a `SCNVector3`, this is nothing but a vector object with 3 axes: `x`, `y`, and `z`.
 
-##### On Plane
+###### On Plane
 To place an object on a plane that has been detected, the user generally taps on the screen within the extent of the plane that has been detected. The tap point we have to work with is a `CGPoint`. 
 
 How then do we get a `SCNVector3` with three elements, you ask?
 
-###### Hit-Testing
+####### Hit-Testing
 With a `CGPoint` and an `ARPlaneAnchor` to work with, we can hit-test the point against the plane anchor to get its position in 3D space. This is the general approach towards how objects are placed on a plane. If that sounds complicated, don’t worry, just follow along:
 
 
@@ -119,7 +119,7 @@ The `worldTransform` property of the `ARHitTestResult` contains information abou
 
 So, no we have a position on the plane we can work with.
 
-##### Off Plane
+###### Off Plane
 To add an object off plane, the usual approach is to add it in front of the device’s camera where the user taps. This can easily be accomplished by building a `SCNVector3` using the camera transform.
 
 To obtain the camera transform:
@@ -188,7 +188,7 @@ func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode
 
 This method returns an SCNNode for an anchor in the session, an anchor’s identifier property can be used to distinguish between different anchors added to the session. We simply return a SCNNode in this method, for the required anchor to add 3D content.
 
-### The Code
+#### **The Code**
 Let’s look at how all of this comes together in code:
 
 1. Adding 3D content on plane:
@@ -266,12 +266,12 @@ override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
 So, that’s about how to add 3D content on and off-plane with ARKit.
 
-### Moving On
+#### **Moving On**
 In this part we have seen how to add 3D content to your AR session, we'll look into adding some lights and making your objects more interesting in the next part. Thanks for following along, and feel free to leave any feedback!
 
 Index of the series of ARKit posts:
 - [Part I: Introducing ARKit](../posts/arkit-a-noobs-guide-part-one)
 - [Part II: Detecting Planes](../posts/arkit-a-noobs-guide-part-two)
-- Part III: Adding 3D content to your scene
-- Part IV: Lighting with SceneKit
+- [Part III: Adding 3D content to your scene](../posts/arkit-a-noobs-guide-part-three)
+- [Part IV: Lighting with SceneKit](../posts/arkit-a-noobs-guide-part-four)
 
