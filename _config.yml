@@ -4,6 +4,7 @@ name: Arvind Ravi
 paginate: 25
 url: http://arvindravi.com # add your site url (format: https://example.com/)
 blog_theme: light # Or use dark
+cache: false
 
 # Optional settings
 

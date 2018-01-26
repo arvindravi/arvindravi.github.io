@@ -26,19 +26,31 @@ In this section, we will discuss the concepts behind the Codable Protocols, usin
 [
   {
     "title": "Pulp Fiction",
-    "actors": ["Samuel L Jackson", "John Travolta"]
+    "actors": [ 
+      { "name": "Samuel L Jackson" }, 
+      { "name": "John Travolta" }
+     ]
   },
   {
     "title": "Ocean's Eleven",
-    "actors": ["George Clooney", "Brad Pitt", "Matt Damon"]
+    "actors": [
+      { "name": "George Clooney" },
+      { "name": "Brad Pitt" },
+      { "name": "Matt Damon" }
+    ]
   },
   {
     "title": "Goodfellas",
-    "actors": ["Robert De Niro", "Ray Liotta"]
+    "actors": [
+      { "name": "Robert De Niro" },
+      { "name": "Ray Liotta" }
+    ]
   },
   {
     "title": "I Am Sam",
-    "actors": ["Sean Penn"]
+    "actors": [
+      { "name": "Sean Penn" }
+    ]
   }
 ]
 {% endhighlight %}
@@ -149,8 +161,6 @@ Assuming we have a property called `meta` on `Movie` which in JSON is nested lik
   }
 ]
 {% endhighlight %}
-
->  Let Swift know about the structure of your encoded form
 
 Because our JSON data contains a second level of nested information for the rating property, the type’s `Codable` protocol use two enumerations that each list the coding keys on a particular level.
 
