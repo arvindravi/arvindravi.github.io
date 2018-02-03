@@ -154,7 +154,7 @@ Assuming we have a property called `meta` on `Movie` which in JSON is nested lik
 [
   {
     "title": "Goodfellas",
-    "actors": ["Robert De Niro", "Ray Liotta"],
+    "actors": [ { "name": "Robert De Niro" }, { "name": "Ray Liotta" } ]
     "meta": {
         "rating": 8.0 
     }

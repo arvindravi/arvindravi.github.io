@@ -2,6 +2,9 @@
 
 WebFont.load({
   google: {
-    families: ['Cormorant Garamond:700', 'Lato:300,400,700']
+    families: [
+      'Eczar:500',
+      'Hind Siliguri:400'
+    ]
   }
 });

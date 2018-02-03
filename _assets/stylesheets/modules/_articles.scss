@@ -54,6 +54,7 @@
     padding-right: 25px;
     color: $article-header-title-color;
     border-bottom: 1px solid transparent;
+    font-family: $serif;
     .icon {
       display: inline-block;
       margin-top: -2px;
@@ -130,6 +131,7 @@
   padding-bottom: 30px;
   margin-bottom: 30px;
   border-bottom: 1px solid $base-border-color;
+  font-family: $serif;
   p {
     display: block;
     margin: 12px 0 10px;
@@ -156,7 +158,6 @@
   h4 {
     display: block;
     margin-bottom: 10px;
-    font-family: $sans-serif;
     color: $article-post-titles-color;
   }
   blockquote p {

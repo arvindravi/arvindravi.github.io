@@ -4,14 +4,13 @@ name: Arvind Ravi
 paginate: 25
 url: http://arvindravi.com # add your site url (format: https://example.com/)
 blog_theme: light # Or use dark
-cache: false
 
 # Optional settings
 
 about_enabled: false # Change to true if you wish to show an icon in the navigation that redirects to the about page
 discus_identifier: arvindravi # Add your Disqus identifier
 ga_analytics: UA-37200107-6 # Add your GA Tracking Id
-local_fonts: true # Change to true if you wish to use local fonts
+local_fonts: false # Change to true if you wish to use local fonts
 rss_enabled: false # Change to false if not
 scrollappear_enabled: true # Change to false to disable
 social:
@@ -35,6 +34,7 @@ assets:
     - _assets/javascripts
     - _assets/stylesheets
     - _assets/yarn
+    - _assets/stylesheets/modules
 collections:
   my_tags:
     output: true
