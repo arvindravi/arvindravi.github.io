@@ -181,6 +181,7 @@ struct Movie: Codable {
    enum AdditionalInfoKeys: String, CodingKey {
       case rating
    }
+}
 {% endhighlight %}
 
 To be able to support `Decodable` for our data with a nested structure, we can extend the `Movie` to conform to `Decodable` by implementing its initialiser:
