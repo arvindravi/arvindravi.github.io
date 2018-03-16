@@ -1,20 +1,74 @@
----
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="https://www.w3.org/2005/Atom" xmlns:dc="https://purl.org/dc/elements/1.1/">
   <channel>
-    <title>{{ site.name | xml_escape }}</title>
-    <description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>
-    <link>{{ site.url }}</link>
-    <atom:link href="{{ page.path | absolute_url }}" rel="self" type="application/rss+xml" />
-    {% for post in site.posts limit:10 %}
+    <title>Arvind Ravi</title>
+    <description></description>
+    <link>http://arvindravi.com</link>
+    <atom:link href="http://arvindravi.com/feed.xml" rel="self" type="application/rss+xml" />
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.description | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | absolute_url }}</link>
-        <guid isPermaLink="true">{{ post.url | absolute_url }}</guid>
+        <title>Long Story Short: Codable Protocols</title>
+        <description></description>
+        <pubDate>Thu, 18 Jan 2018 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/lss-codable-protocols</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/lss-codable-protocols</guid>
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>Networking with Swift</title>
+        <description></description>
+        <pubDate>Wed, 08 Nov 2017 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/networking-with-swift</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/networking-with-swift</guid>
+      </item>
+    
+      <item>
+        <title>ARKit: A Noob's Guide - Part IV</title>
+        <description></description>
+        <pubDate>Tue, 31 Oct 2017 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/arkit-a-noobs-guide-part-four</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/arkit-a-noobs-guide-part-four</guid>
+      </item>
+    
+      <item>
+        <title>ARKit: A Noob's Guide - Part III</title>
+        <description></description>
+        <pubDate>Wed, 11 Oct 2017 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/arkit-a-noobs-guide-part-three</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/arkit-a-noobs-guide-part-three</guid>
+      </item>
+    
+      <item>
+        <title>ARKit: A Noobs Guide - Part II</title>
+        <description></description>
+        <pubDate>Wed, 27 Sep 2017 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/arkit-a-noobs-guide-part-two</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/arkit-a-noobs-guide-part-two</guid>
+      </item>
+    
+      <item>
+        <title>ARKit: A Noob's Guide - Part I</title>
+        <description></description>
+        <pubDate>Sun, 24 Sep 2017 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/arkit-a-noobs-guide-part-one</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/arkit-a-noobs-guide-part-one</guid>
+      </item>
+    
+      <item>
+        <title>Architecting Software: The Whats and The Whys</title>
+        <description></description>
+        <pubDate>Tue, 25 Jul 2017 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/the-whats-and-the-whys-of-software-architecture-html</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/the-whats-and-the-whys-of-software-architecture-html</guid>
+      </item>
+    
+      <item>
+        <title>On Tableviews</title>
+        <description></description>
+        <pubDate>Thu, 04 May 2017 00:00:00 +0530</pubDate>
+        <link>http://arvindravi.com/posts/the-on-tableviews-html</link>
+        <guid isPermaLink="true">http://arvindravi.com/posts/the-on-tableviews-html</guid>
+      </item>
+    
   </channel>
 </rss>

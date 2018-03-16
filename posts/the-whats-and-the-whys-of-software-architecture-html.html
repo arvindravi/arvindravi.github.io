@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Arvind Ravi | Architecting Software: The Whats and The Whys</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Architecting Software: The Whats and The Whys">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://arvindravi.com/posts/the-whats-and-the-whys-of-software-architecture-html">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Arvind Ravi">
+  <meta property="og:image" content="http://arvindravi.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://arvindravi.com/posts/the-whats-and-the-whys-of-software-architecture-html">
+  <meta name="twitter:title" content="Architecting Software: The Whats and The Whys">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="http://arvindravi.com/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-1257007127614c626d7bbcd3bb62241c0f45a0cded0baacc45a03b27d61423c3.png">
+  <link href="http://arvindravi.com/feed.xml" type="application/rss+xml" rel="alternate" title="Arvind Ravi Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/assets/light-4f0137368429498e4edab07006e01c74914df7697c3e8b6cb3ec10fe1454720b.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/" class="header-logo" title="Arvind Ravi">Arvind Ravi</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/arvindravi_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://dribbble.com/arvindravi" rel="noreferrer noopener" target="_blank" title="Dribbble">
+          <span class="icon icon-dribbble"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:hello@arvindravi.com" title="Email">
+          <span class="icon icon-email"></span>
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>Architecting Software: The Whats and The Whys</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                July 25, 2017
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  3 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/software">software</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <p>I have often come across code bases that power full-fledged software systems and companies that pay little to zero attention to software architecture. The state of the code is usually like a big bowl of spaghetti mixed with ramen. 🍜 Although it sounds like delicious food, it’s not desirable.</p>
+
+<p><br /></p>
+
+<h4 id="code-bases-grow-just-like-people"><em>“Code bases grow. Just like people.”</em></h4>
+
+<p><br /></p>
+
+<p>So its naturally important that it grows well, and ages better, a well-architected system is a breeze to work with. Modularity and Conventions, in good architected code, command any new addition to the code like a new feature or makes it easier to fix that bug you have without having to spend a lot of time on it.</p>
+
+<p>Why is it that developers/startups don’t pay attention to something that will make all their lives easier?</p>
+
+<hr />
+<p><br /></p>
+<h4 id="-lack-of-understanding">🐒 <strong>Lack of Understanding</strong></h4>
+<p><br />
+Generally, in small-time companies and startups, the person hiring the tech talent is bound to go with what the developers claim to know. The people running software companies could do with some basic level of understanding of software which will help them make better decisions when it comes to hiring tech talent. This lack of knowledge causes them to hire poor talent, which in-turn leads to amateur developers writing  code without any understanding of architecture.</p>
+
+<p>Whent comes to software, it’s essential that there’s no magic element in the code that makes it work. By magic element, I mean the part of the code that people have no idea what it does but breaks the software when removed, usually a chunk that’s left by a previous developer, or code managed by third party libraries. The importance of hiring a developer who knows what he’s doing with the code is paramount.</p>
+
+<p>The issue with new developers is that they think in <em>too small</em> a scale when writing code, and fail to see outside of it to get a bigger picture.</p>
+
+<p><img src="https://thumbs.gfycat.com/EnormousSpottedCornsnake-size_restricted.gif" alt="" /></p>
+
+<p>Usually, the thought process is limited in terms of functionality and features that need to get checked off their list.</p>
+
+<p>Just like how a building is planned out and is architected before it’s actually built, software too requires that kind of planning and architecting before the first line of code is even written, and this needs to be taken seriously by the developers and non-developers alike if at the end of the day the goal is to produce a high-quality software product, and can be ignored otherwise.</p>
+
+<hr />
+<p><br /></p>
+<h4 id="-architecting-software">🤓 <strong>Architecting Software</strong></h4>
+<p><br />
+A Software product, be it an API, a web app, a mobile app, an extension - needs to be analyzed and looked at using the top-down approach:</p>
+
+<ul>
+  <li>Overview: What is the goal of the software product?</li>
+  <li>Function: What are the essential functionalities of the software product?</li>
+  <li>Modularise: Split out the software product into layers, abstracting concerns, for example:
+    <ul>
+      <li>
+        <p>Authentication Layer (Layer that deals with authenticating the user)</p>
+      </li>
+      <li>Data Layer (Layer that deals with communicating with the API of the product)</li>
+      <li>Third Party Communications Layer (Layer that deals with communicating with third party APIs eg: Facebook, Instagram, etc)</li>
+    </ul>
+  </li>
+  <li>Implement: Proceed to implement layer wise while making sure good conventions of code are met</li>
+  <li>Optionally, write tests for each layer - this will ensure that there are no magic elements or broken pieces anywhere in the code</li>
+</ul>
+
+<p>How these layers are structured is entirely up to the developers, different scenarios require different kinds of abstraction. But the fundamental idea remains the same - <em>abstraction of concerns</em>.</p>
+
+<hr />
+<p><br /></p>
+<h4 id="-to-good-code">🍻 <strong>To good code</strong></h4>
+<p><br />
+Understanding the software product you build, even if you’re a not a developer is not as hard as people make it out to be.</p>
+
+<p>Pardon me for the building reference again, but if it’s not hard to know which floor of a building has what, it shouldn’t be hard to know what layers of the product you’re building does what.</p>
+
+<p>At the end of the day, you want to make sure the product you’re building is of good quality. Paying attention to the design patterns and architecture is one way to ensure that, is all.</p>
+
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=Architecting+Software%3A+The+Whats+and+The+Whys - http://arvindravi.com/posts/the-whats-and-the-whys-of-software-architecture-html by @arvindravi_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://arvindravi.com/posts/the-whats-and-the-whys-of-software-architecture-html" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=http://arvindravi.com/posts/the-whats-and-the-whys-of-software-architecture-html" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://arvindravi.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    © Arvind Ravi
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-37200107-6','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/assets/vendor-d95a8f71766d2efbcd7abf3bce924b22e1f6e46c0ce250b0abbdb19e1611dfb9.js"></script>
+
+
+
+  <script src="/assets/webfonts-b43bedd6aeaea7f39fa218abef200a1a7b9f319317a4a2c437eafba5cb04149d.js"></script>
+
+
+
+
+  <script src="/assets/scrollappear-be8da54bea4794209255bc7a9b8b2266fbd9d1db597964d66469f230dacf59f8.js"></script>
+
+
+
+<script src="/assets/application-a9813e7f426d2e264d63b6b67e8691cc3949233038e5df69736eebd0c28a6438.js"></script>
+
+
+</body>
+</html>

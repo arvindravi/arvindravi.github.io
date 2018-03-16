@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Arvind Ravi | Long Story Short: Codable Protocols</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Long Story Short: Codable Protocols">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://arvindravi.com/posts/lss-codable-protocols">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Arvind Ravi">
+  <meta property="og:image" content="http://arvindravi.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://arvindravi.com/posts/lss-codable-protocols">
+  <meta name="twitter:title" content="Long Story Short: Codable Protocols">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="http://arvindravi.com/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-1257007127614c626d7bbcd3bb62241c0f45a0cded0baacc45a03b27d61423c3.png">
+  <link href="http://arvindravi.com/feed.xml" type="application/rss+xml" rel="alternate" title="Arvind Ravi Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/assets/light-4f0137368429498e4edab07006e01c74914df7697c3e8b6cb3ec10fe1454720b.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/" class="header-logo" title="Arvind Ravi">Arvind Ravi</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/arvindravi_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://dribbble.com/arvindravi" rel="noreferrer noopener" target="_blank" title="Dribbble">
+          <span class="icon icon-dribbble"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:hello@arvindravi.com" title="Email">
+          <span class="icon icon-email"></span>
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>Long Story Short: Codable Protocols</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                January 18, 2018
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  6 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/swift,">swift,</a>
+                
+                  <a href="/tag/software">software</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <p>As developers, I’m sure we all have been in a place where we’ve had to deal with JSON in our lives. In my previous article, I detailed out how to deal with networking in Swift. Although the pattern discussed in the previous article still works excellently, we relied heavily on the <code class="highlighter-rouge">JSONSerialization</code> class to convert data back and forth to JSON.</p>
+
+<p>With Swift 4, there are three fancy protocols that we could leverage to build a better model to deal with networking data:</p>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/swift/codable">Codable</a></li>
+  <li><a href="https://developer.apple.com/documentation/swift/encodable">Encodable</a></li>
+  <li><a href="https://developer.apple.com/documentation/swift/decodable">Decodable</a></li>
+</ul>
+
+<p><strong>Encodable</strong> Protocol - defines a type that can be encoded into another form/representation for instance, JSON.</p>
+
+<p><strong>Decodable</strong> Protocol - defines a type that can be decoded from another representation into a native Swift type.</p>
+
+<p><strong>Codable</strong> Protocol - simply is a wrapper over <strong>Encodable</strong> and <strong>Decodable</strong>  Protocols, and represents a type that can both be encoded and decoded.</p>
+
+<h1 id="the-fundamentals">The Fundamentals</h1>
+<p>In this section, we will discuss the concepts behind the Codable Protocols, using the example from the previous article:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Pulp Fiction"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span> 
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Samuel L Jackson"</span> <span class="p">},</span> 
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"John Travolta"</span> <span class="p">}</span>
+     <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Ocean's Eleven"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"George Clooney"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Brad Pitt"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Matt Damon"</span> <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Goodfellas"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Robert De Niro"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Ray Liotta"</span> <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"I Am Sam"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Sean Penn"</span> <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Looking at the data, we realise that we could have two types to model this:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Movie</code></li>
+  <li><code class="highlighter-rouge">Actor</code></li>
+</ul>
+
+<p>Swift 4 makes it easier to make types codable. As long as the type declares its properties using types that are already codable, by simply adding <code class="highlighter-rouge">Codable</code> to the inheritance list on the definition it triggers the conformance to Codable automatically.</p>
+
+<p>This means the type now can be encoded/decoded using a <code class="highlighter-rouge">JSONEncoder</code> or a <code class="highlighter-rouge">PropertyListEncoder</code> to encode and decode by itself, even though we didn’t have to implement anything for it.</p>
+
+<p>The types that are natively codable include:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">String</code></li>
+  <li><code class="highlighter-rouge">Int</code></li>
+  <li><code class="highlighter-rouge">Double</code></li>
+  <li><code class="highlighter-rouge">Date</code></li>
+  <li><code class="highlighter-rouge">Data</code></li>
+  <li><code class="highlighter-rouge">URL</code></li>
+</ul>
+
+<p>And as long as the elements they contain are <em>Codable</em>, the following types can also be considered as Codable:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Array</code></li>
+  <li><code class="highlighter-rouge">Dictionary</code></li>
+  <li><code class="highlighter-rouge">Optional</code></li>
+</ul>
+
+<p><strong>Code</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Actor</span><span class="p">:</span> <span class="kt">Codable</span> <span class="p">{</span>
+ <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">Movie</span><span class="p">:</span> <span class="kt">Codable</span> <span class="p">{</span>
+ <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span>
+ <span class="k">var</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Actor</span><span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>In the above example, we’ve declared both our types as Codable and the automatic conformance is triggered without having to implement anything more because we simply are trying to encode/decode types that are already Codable.</p>
+
+<h1 id="encoding">Encoding</h1>
+<p>Now that our types are <code class="highlighter-rouge">Codable</code>, we can now get to the exciting part, trying to encode our type into say, JSON.</p>
+
+<p>To encode the <code class="highlighter-rouge">Movie</code> type into JSON. We use an instance of <code class="highlighter-rouge">JSONEncoder</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Movie to be encoded</span>
+<span class="k">let</span> <span class="nv">movie</span> <span class="o">=</span> <span class="kt">Movie</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Goodfellas"</span><span class="p">)</span>
+
+<span class="c1">// Encoder</span>
+<span class="k">let</span> <span class="nv">encoder</span> <span class="o">=</span> <span class="kt">JSONEncoder</span><span class="p">()</span>
+
+<span class="c1">// Encoded Data</span>
+<span class="k">let</span> <span class="nv">encodedMovie</span> <span class="o">=</span> <span class="k">try</span> <span class="n">encoder</span><span class="o">.</span><span class="nf">encode</span><span class="p">(</span><span class="n">movie</span><span class="p">)</span></code></pre></figure>
+
+<p>Since the properties already conform to Codable, we were able to use the encoder directly to encode the movie.</p>
+
+<h1 id="decoding">Decoding</h1>
+<p>Now that <code class="highlighter-rouge">encodedMovie</code> contains the encoded data, typically as <code class="highlighter-rouge">Data</code>, we can see how we could possible decode this into native movie type:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Data to be decoded</span>
+<span class="k">let</span> <span class="nv">encodedMovie</span><span class="p">:</span> <span class="kt">Data</span><span class="p">?</span>
+ 
+<span class="c1">// Decoder</span>
+<span class="k">let</span> <span class="nv">decoder</span> <span class="o">=</span> <span class="kt">JSONDecoder</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">movie</span> <span class="o">=</span> <span class="k">try</span> <span class="n">decoder</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="kt">Movie</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="n">encodedMovie</span><span class="p">)</span>
+
+<span class="c1">// `movie` is a native swift object now</span>
+<span class="c1">// movie.title is valid</span></code></pre></figure>
+
+<h1 id="coding-keys">Coding Keys</h1>
+<p>Codable types, can optionally specify an <code class="highlighter-rouge">enum</code> called <code class="highlighter-rouge">CodingKeys</code> that conforms to <code class="highlighter-rouge">CodingKey</code> protocol. When this particular <code class="highlighter-rouge">enum</code> is present, the cases specified are the list of properties that are included when the type is encoded or decoded.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Movie</span><span class="p">:</span> <span class="kt">Encodable</span> <span class="p">{</span>
+  <span class="kd">enum</span> <span class="kt">CodingKeys</span><span class="p">:</span> <span class="kt">CodingKey</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">title</span><span class="p">,</span> <span class="n">actors</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h1 id="doin-it-manually">Doin’ it manually</h1>
+
+<p>Things aren’t always nice. They’re not always easy. You may often find yourself in a place where your Swift type has a different structure than the JSON you have to deal with. In such cases the way to go is:</p>
+
+<ul>
+  <li>Let Swift know about the structure of your encoded form</li>
+  <li>Implement an init on the type reflecting the structure of the JSON or the encoded form</li>
+</ul>
+
+<p><strong>Code</strong>:</p>
+
+<p>Assuming we have a property called <code class="highlighter-rouge">meta</code> on <code class="highlighter-rouge">Movie</code> which in JSON is nested like:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Goodfellas"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span> <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Robert De Niro"</span> <span class="p">},</span> <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"Ray Liotta"</span> <span class="p">}</span> <span class="p">]</span>
+    <span class="s">"meta"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"rating"</span><span class="p">:</span> <span class="mf">8.0</span> 
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Because our JSON data contains a second level of nested information for the rating property, the type’s <code class="highlighter-rouge">Codable</code> protocol use two enumerations that each list the coding keys on a particular level.</p>
+
+<p>We can extend the <code class="highlighter-rouge">Movie</code> type to reflect this structure by using two enumerations to list the Coding Keys used on each level.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Movie</span><span class="p">:</span> <span class="kt">Codable</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span>
+  <span class="k">var</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Actor</span><span class="p">]</span>
+  <span class="k">let</span> <span class="nv">rating</span><span class="p">:</span> <span class="kt">Double</span>
+
+  <span class="kd">enum</span> <span class="kt">CodingKeys</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="kt">CodingKey</span> <span class="p">{</span>
+     <span class="k">case</span> <span class="n">title</span>
+     <span class="k">case</span> <span class="n">actors</span>
+     <span class="k">case</span> <span class="n">additionalInfo</span>
+  <span class="p">}</span>
+
+   <span class="kd">enum</span> <span class="kt">AdditionalInfoKeys</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="kt">CodingKey</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="n">rating</span>
+   <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>To be able to support <code class="highlighter-rouge">Decodable</code> for our data with a nested structure, we can extend the <code class="highlighter-rouge">Movie</code> to conform to <code class="highlighter-rouge">Decodable</code> by implementing its initialiser:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">Movie</span><span class="p">:</span> <span class="kt">Decodable</span> <span class="p">{</span>
+  <span class="nf">init</span><span class="p">(</span><span class="n">from</span> <span class="nv">decoder</span><span class="p">:</span> <span class="kt">Decoder</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">values</span> <span class="o">=</span> <span class="k">try</span> <span class="n">decoder</span><span class="o">.</span><span class="nf">container</span><span class="p">(</span><span class="nv">keyedBy</span><span class="p">:</span> <span class="kt">CodingKeys</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="k">try</span> <span class="n">values</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="kt">String</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="o">.</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">actors</span> <span class="o">=</span> <span class="k">try</span> <span class="n">values</span><span class="o">.</span><span class="nf">decode</span><span class="p">([</span><span class="kt">Actor</span><span class="p">]</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="o">.</span><span class="n">actors</span><span class="p">)</span>
+
+    <span class="k">let</span> <span class="nv">additionalInfo</span> <span class="o">=</span> <span class="k">try</span> <span class="n">values</span><span class="o">.</span><span class="nf">nestedContainer</span><span class="p">(</span><span class="nv">keyedBy</span><span class="p">:</span> <span class="kt">AdditionalInfoKeys</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="o">.</span><span class="n">additionalInfo</span><span class="p">)</span>
+    <span class="n">rating</span> <span class="o">=</span> <span class="n">additionalInfo</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="kt">Double</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="o">.</span><span class="n">rating</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>That should take care of decoding nested data from JSON.</p>
+
+<p>Codable Protocols are very handly, and make dealing with an API a little easier, so the next time you’re looking to work with an API, give Codable Protocols a shot.</p>
+
+<p>Feel free to leave any feedback, or questions behind.</p>
+
+<p>👨🏻‍💻</p>
+
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=Long+Story+Short%3A+Codable+Protocols - http://arvindravi.com/posts/lss-codable-protocols by @arvindravi_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://arvindravi.com/posts/lss-codable-protocols" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=http://arvindravi.com/posts/lss-codable-protocols" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://arvindravi.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    © Arvind Ravi
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-37200107-6','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/assets/vendor-d95a8f71766d2efbcd7abf3bce924b22e1f6e46c0ce250b0abbdb19e1611dfb9.js"></script>
+
+
+
+  <script src="/assets/webfonts-b43bedd6aeaea7f39fa218abef200a1a7b9f319317a4a2c437eafba5cb04149d.js"></script>
+
+
+
+
+  <script src="/assets/scrollappear-be8da54bea4794209255bc7a9b8b2266fbd9d1db597964d66469f230dacf59f8.js"></script>
+
+
+
+<script src="/assets/application-a9813e7f426d2e264d63b6b67e8691cc3949233038e5df69736eebd0c28a6438.js"></script>
+
+
+</body>
+</html>

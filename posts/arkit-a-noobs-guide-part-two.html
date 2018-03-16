@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Arvind Ravi | ARKit: A Noobs Guide - Part II</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="ARKit: A Noobs Guide - Part II">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://arvindravi.com/posts/arkit-a-noobs-guide-part-two">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Arvind Ravi">
+  <meta property="og:image" content="http://arvindravi.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://arvindravi.com/posts/arkit-a-noobs-guide-part-two">
+  <meta name="twitter:title" content="ARKit: A Noobs Guide - Part II">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="http://arvindravi.com/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-1257007127614c626d7bbcd3bb62241c0f45a0cded0baacc45a03b27d61423c3.png">
+  <link href="http://arvindravi.com/feed.xml" type="application/rss+xml" rel="alternate" title="Arvind Ravi Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/assets/light-4f0137368429498e4edab07006e01c74914df7697c3e8b6cb3ec10fe1454720b.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/" class="header-logo" title="Arvind Ravi">Arvind Ravi</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/arvindravi_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://dribbble.com/arvindravi" rel="noreferrer noopener" target="_blank" title="Dribbble">
+          <span class="icon icon-dribbble"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:hello@arvindravi.com" title="Email">
+          <span class="icon icon-email"></span>
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>ARKit: A Noobs Guide - Part II</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                September 27, 2017
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  6 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/Swift">Swift</a>
+                
+                  <a href="/tag/ARKit">ARKit</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <h3 id="part-ii-detecting-planes-">Part II: Detecting Planes 🛫</h3>
+
+<h3 id="the-basics">The Basics</h3>
+
+<p>In the <a href="../posts/arkit-a-noobs-guide-part-one">previous</a> part, we went through the basics of ARKit, and some of its most basic classes that help with building AR experiences. In this part, we’ll look at more exciting stuff like detecting flat surfaces in your scene. Around you. Or anywhere really.</p>
+
+<p>Let’s get right into it.</p>
+
+<h3 id="the-exciting-stuff-plane-detection">The Exciting Stuff: Plane Detection</h3>
+
+<p>Let’s quickly go over the basics of building an AR experience:</p>
+<ol>
+  <li>Create an <strong>ARWorldTrackingConfiguration</strong> object</li>
+  <li>Create an <strong>ARSession</strong></li>
+  <li>Bind the <strong>ARSession</strong> to a <strong>ARSCNView</strong></li>
+  <li>Run the <strong>ARSession</strong> with the configuration object</li>
+</ol>
+
+<p>ARKit has the ability to detect planar surfaces, not necessarily horizontal plane surfaces, but it is what we are able to detect at this point. Support for vertical surfaces, I believe, will be added in the future. Oh, the <a href="http://magicleap.com">glorious future</a>.</p>
+
+<p><strong>Code</strong></p>
+
+<p>To enable plane detection, we simply set a property indicating the type of plane the session will detect, when the configuration object is created:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">ARWorldTrackingConfiguration</span><span class="p">()</span>
+<span class="n">configuration</span><span class="o">.</span><span class="n">planeDetection</span> <span class="o">=</span> <span class="o">.</span><span class="n">horizontal</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">planeDetection</code> property on <code class="highlighter-rouge">ARWorldTrackingConfiguration</code> is an enum with one value <code class="highlighter-rouge">ARPlaneDetectionHorizontal</code>  at the time of writing.</p>
+
+<p>And by default, plane detection is turned off.</p>
+
+<p>Now you expect to see horizontal surfaces around you in the session. But, you don’t. Let’s see why.</p>
+
+<h3 id="show-them-planes">Show them planes</h3>
+
+<p>If plane detection is enabled on the configuration object, and the session is run, ARKit analyses feature points and detects horizontal planar surfaces in the scene, adds <code class="highlighter-rouge">ARPlaneAnchor</code> objects to the session.</p>
+
+<p>Let’s look into what the logic actually is like.</p>
+
+<p>An <code class="highlighter-rouge">ARSession</code> is able to track <code class="highlighter-rouge">ARAnchor</code>’s position and orientation in 3D space. When plane detection is enabled, <code class="highlighter-rouge">ARPlaneAnchor</code> (<em>which is a subclass of ARAnchor</em>) objects get added to the session whenever a flat surface is detected.</p>
+
+<p>This information is available to the session, but this is not visible to the user unless we make it. The <code class="highlighter-rouge">ARPlaneAnchor</code> objects contain some useful properties like <code class="highlighter-rouge">alignment</code>, <code class="highlighter-rouge">center</code>, and <code class="highlighter-rouge">extent</code> which can be used to add a visual plane to the scene.</p>
+
+<p>Every time an ARPlaneAnchor is added, the session notifies your <code class="highlighter-rouge">ARSessionDelegate</code>, <code class="highlighter-rouge">ARSCNViewDelegate</code> or <code class="highlighter-rouge">ARSKViewDelegate</code>. Let’s do this with <strong>SceneKit</strong>, since we’re familiar already with ARSCNView.</p>
+
+<p>Most often, the View Controller that is handling your <code class="highlighter-rouge">ARSCNView</code>, would be your <code class="highlighter-rouge">ARSCNViewDelegate</code>, and you can implement methods on it that will be called by the session when it needs information. 
+As for our case, at any point during the session, whenever an <code class="highlighter-rouge">ARAnchor</code> is added to the session, the session adds an empty <code class="highlighter-rouge">SCNNode</code> at the anchor position and notifies the delegate with this method:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">renderer</span><span class="p">(</span><span class="n">_</span> <span class="nv">renderer</span><span class="p">:</span> <span class="kt">SCNSceneRenderer</span><span class="p">,</span> <span class="n">didAdd</span> <span class="nv">node</span><span class="p">:</span> <span class="kt">SCNNode</span><span class="p">,</span> <span class="k">for</span> <span class="nv">anchor</span><span class="p">:</span> <span class="kt">ARAnchor</span><span class="p">)</span></code></pre></figure>
+
+<p>We simply check if the anchor added is an <code class="highlighter-rouge">ARPlaneAnchor</code>, and use the anchor’s properties to add a visual plane onto the scene by adding it to the empty node.</p>
+
+<p><strong>Code</strong></p>
+
+<p>There are two parts to showing detected plane surfaces:</p>
+<ul>
+  <li>Check if the anchor that was added was a <code class="highlighter-rouge">ARPlaneAnchor</code></li>
+  <li>and <code class="highlighter-rouge">addPlane()</code> if the anchor added is an <code class="highlighter-rouge">ARPlaneAnchor</code></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">renderer</span><span class="p">(</span><span class="n">_</span> <span class="nv">renderer</span><span class="p">:</span> <span class="kt">SCNSceneRenderer</span><span class="p">,</span> <span class="n">didAdd</span> <span class="nv">node</span><span class="p">:</span> <span class="kt">SCNNode</span><span class="p">,</span> <span class="k">for</span> <span class="nv">anchor</span><span class="p">:</span> <span class="kt">ARAnchor</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">guard</span> <span class="k">let</span> <span class="nv">anchor</span> <span class="o">=</span> <span class="n">anchor</span> <span class="k">as?</span> <span class="kt">ARPlaneAnchor</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+	<span class="c1">// Here `anchor` is an ARPlaneAnchor</span>
+	<span class="nf">addPlane</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">node</span><span class="p">,</span> <span class="nv">at</span><span class="p">:</span> <span class="n">anchor</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>For a detected <code class="highlighter-rouge">ARPlaneAnchor</code>, we add a plane which is an <code class="highlighter-rouge">SCNNode</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">addPlane</span><span class="p">(</span><span class="k">for</span> <span class="nv">node</span><span class="p">:</span> <span class="kt">SCNNode</span><span class="p">,</span> <span class="n">at</span> <span class="nv">anchor</span><span class="p">:</span> <span class="kt">ARPlaneAnchor</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Create a new node</span>
+  <span class="k">let</span> <span class="nv">planeNode</span> <span class="o">=</span> <span class="kt">SCNNode</span><span class="p">()</span>
+
+  <span class="k">let</span> <span class="nv">w</span> <span class="o">=</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="n">anchor</span><span class="o">.</span><span class="n">extent</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">let</span> <span class="nv">h</span> <span class="o">=</span> <span class="mf">0.01</span>
+  <span class="k">let</span> <span class="nv">l</span> <span class="o">=</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="n">anchor</span><span class="o">.</span><span class="n">extent</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+
+  <span class="c1">// Box Geometry with a minimum height</span>
+  <span class="k">let</span> <span class="nv">geometry</span>   <span class="o">=</span> <span class="kt">SCNBox</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="n">h</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">l</span><span class="p">,</span> <span class="nv">chamferRadius</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">)</span>   
+ 
+  <span class="c1">// Translucent white plane</span>
+  <span class="n">geometry</span><span class="o">.</span><span class="n">firstMaterial</span><span class="p">?</span><span class="o">.</span><span class="n">diffuse</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="o">.</span><span class="n">white</span><span class="o">.</span><span class="nf">withAlphaComponent</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+ 
+  <span class="c1">// Set Position</span>
+  <span class="c1">// Use the `center` property to find the bounds of the anchor to place the node</span>
+  <span class="n">planeNode</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="kt">SCNVector3</span><span class="p">(</span>
+    <span class="n">anchor</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+    <span class="n">anchor</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">anchor</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">z</span>
+  <span class="p">)</span>
+ 
+  <span class="c1">// Keep a reference to plane you're adding, so you can update it later</span>
+  <span class="n">planes</span><span class="p">[</span><span class="n">anchor</span><span class="p">]</span> <span class="o">=</span> <span class="n">planeNode</span>
+ 
+  <span class="c1">// Add PlaneNode to your node</span>
+  <span class="n">node</span><span class="o">.</span><span class="nf">addChildNode</span><span class="p">(</span><span class="n">planeNode</span><span class="p">)</span>
+ <span class="p">}</span></code></pre></figure>
+
+<p>With that, you should have planes being detected and displayed in the scene around you.</p>
+
+<p>I prefer to abstract the plane logic to its own class. You can take a look at my Plane implementation <a href="https://gist.github.com/arvindravi/4a938f38455299c39ec1e482ff3f7f71">here</a>.</p>
+
+<hr />
+<p><br /></p>
+
+<p>That’s not all, folks. We still have one thing left –</p>
+
+<p>When planes are detected in the scene, ARKit constantly analyses the feature points for better results, and thereby the same plane that was detected could have a better result, by result I mean the boundaries and the position could be more accurate. To handle this and update the UI accordingly, we need a reference to the planes that we add to our session:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">planes</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ARPlaneAnchor</span><span class="p">:</span> <span class="kt">SCNNode</span><span class="p">]()</span></code></pre></figure>
+
+<p>I use a dictionary to keep a reference of the planes when they’re added to the session, so I can refer back to the plane that needs updating using its anchor.</p>
+
+<p>When boundaries for existing planes are updated as you get better input from the camera, the following delegate method is called:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">renderer</span><span class="p">(</span><span class="n">_</span> <span class="nv">renderer</span><span class="p">:</span> <span class="kt">SCNSceneRenderer</span><span class="p">,</span> <span class="n">didUpdate</span> <span class="nv">node</span><span class="p">:</span> <span class="kt">SCNNode</span><span class="p">,</span> <span class="k">for</span> <span class="nv">anchor</span><span class="p">:</span> <span class="kt">ARAnchor</span><span class="p">)</span></code></pre></figure>
+
+<p><strong>Code</strong></p>
+
+<ul>
+  <li>Updating an existing plane node</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">updatePlane</span><span class="p">(</span><span class="k">for</span> <span class="nv">anchor</span><span class="p">:</span> <span class="kt">ARPlaneAnchor</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// Pull the plane that needs to get updated </span>
+  <span class="k">let</span> <span class="nv">plane</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">planes</span><span class="p">[</span><span class="n">anchor</span><span class="p">]</span>
+
+  <span class="c1">// Update its geometry</span>
+  <span class="k">if</span> <span class="k">let</span> <span class="nv">geometry</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">geometry</span> <span class="k">as?</span> <span class="kt">SCNBox</span> <span class="p">{</span>
+    <span class="n">geometry</span><span class="o">.</span><span class="n">width</span>  <span class="o">=</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="n">anchor</span><span class="o">.</span><span class="n">extent</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">geometry</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="n">anchor</span><span class="o">.</span><span class="n">extent</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">geometry</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="mf">0.01</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Update its position</span>
+  <span class="n">plane</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="kt">SCNVector3</span><span class="p">(</span>
+    <span class="n">anchor</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+    <span class="n">anchor</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">anchor</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">z</span>
+  <span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>So, now that we have a function that updates the plane’s geometry and position for an <code class="highlighter-rouge">ARPlaneAnchor</code>, it can be called when the delegate is notified of an update:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">renderer</span><span class="p">(</span><span class="n">_</span> <span class="nv">renderer</span><span class="p">:</span> <span class="kt">SCNSceneRenderer</span><span class="p">,</span> <span class="n">didUpdate</span> <span class="nv">node</span><span class="p">:</span> <span class="kt">SCNNode</span><span class="p">,</span> <span class="k">for</span> <span class="nv">anchor</span><span class="p">:</span> <span class="kt">ARAnchor</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Verify the updated anchor is an ARPlaneAnchor</span>
+  <span class="k">guard</span> <span class="k">let</span> <span class="nv">anchor</span> <span class="o">=</span> <span class="n">anchor</span> <span class="k">as?</span> <span class="kt">ARPlaneAnchor</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+
+  <span class="c1">//  Update the plane</span>
+  <span class="nf">updatePlane</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">anchor</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And with that you should have an understanding of how planes are detected and updated in an ARSession.</p>
+
+<h3 id="moving-on">Moving on</h3>
+
+<p>You should pretty much be able to write an AR app that detects flat surfaces around you. But what good is it if you can’t put stuff in 3D you say? We’ll see how to do exactly that in the next part. Feel free to leave any feedback you have.</p>
+
+<p>Index of the series of ARKit posts:</p>
+<ul>
+  <li><a href="../posts/arkit-a-noobs-guide-part-one">Part I: Introducing ARKit</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-two">Part II: Detecting Planes</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-three">Part III: Adding 3D content to your scene</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-four">Part IV: Lighting with SceneKit</a></li>
+</ul>
+
+<p>That’s all folks.</p>
+
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=ARKit%3A+A+Noobs+Guide+-+Part+II - http://arvindravi.com/posts/arkit-a-noobs-guide-part-two by @arvindravi_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://arvindravi.com/posts/arkit-a-noobs-guide-part-two" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=http://arvindravi.com/posts/arkit-a-noobs-guide-part-two" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://arvindravi.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    © Arvind Ravi
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-37200107-6','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/assets/vendor-d95a8f71766d2efbcd7abf3bce924b22e1f6e46c0ce250b0abbdb19e1611dfb9.js"></script>
+
+
+
+  <script src="/assets/webfonts-b43bedd6aeaea7f39fa218abef200a1a7b9f319317a4a2c437eafba5cb04149d.js"></script>
+
+
+
+
+  <script src="/assets/scrollappear-be8da54bea4794209255bc7a9b8b2266fbd9d1db597964d66469f230dacf59f8.js"></script>
+
+
+
+<script src="/assets/application-a9813e7f426d2e264d63b6b67e8691cc3949233038e5df69736eebd0c28a6438.js"></script>
+
+
+</body>
+</html>

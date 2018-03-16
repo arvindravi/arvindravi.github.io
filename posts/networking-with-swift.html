@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Arvind Ravi | Networking with Swift</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Networking with Swift">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://arvindravi.com/posts/networking-with-swift">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Arvind Ravi">
+  <meta property="og:image" content="http://arvindravi.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://arvindravi.com/posts/networking-with-swift">
+  <meta name="twitter:title" content="Networking with Swift">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="http://arvindravi.com/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-1257007127614c626d7bbcd3bb62241c0f45a0cded0baacc45a03b27d61423c3.png">
+  <link href="http://arvindravi.com/feed.xml" type="application/rss+xml" rel="alternate" title="Arvind Ravi Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/assets/light-4f0137368429498e4edab07006e01c74914df7697c3e8b6cb3ec10fe1454720b.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/" class="header-logo" title="Arvind Ravi">Arvind Ravi</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/arvindravi_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://dribbble.com/arvindravi" rel="noreferrer noopener" target="_blank" title="Dribbble">
+          <span class="icon icon-dribbble"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:hello@arvindravi.com" title="Email">
+          <span class="icon icon-email"></span>
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>Networking with Swift</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                November 8, 2017
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  12 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/swift,">swift,</a>
+                
+                  <a href="/tag/software">software</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <h2 id="introduction">Introduction</h2>
+<p>We all know why dependencies are bad, and writing software dependant on other software is not necessarily good. It probably reduces complexity for the time being, and helps you write code faster, but I wouldn’t say it’s exactly the way things are to be done, from my experience.</p>
+
+<p>Writing software independent of 3rd party libraries, helps build robust software that won’t go out of date with time. I’ve used networking libraries in the past, some really excellent ones (<em>_cough Alamofire cough_</em>) to abstract and make things easier while building the networking layer. But of late, I’m trying to write code with zero to no-dependencies. Especially, when working with the iOS Platform. The iOS platform comes baked in with most, if not all, things that you need to build out your app.</p>
+
+<p>Networking is something most apps need to deal with these days, the apps on your phone have to communicate with the internet one way or the other, process requests/responses, and display information. When that’s being done all over the place in your code, it’s nightmare.</p>
+
+<p>Recently, I came across a Swift talk by Florian Kugler and Chris Eidhof of objc.io where they talk about writing the Networking Layer for an app, and how best to do that. In this post, I intend to explain their process with some fundamental Swift concepts, and how to keep concerns separate and why it’s good.</p>
+
+<h2 id="the-architecture-model-resource-webservice">The Architecture: Model, Resource, Webservice</h2>
+<p>Architecting a networking layer can be a task, a difficult one at that, especially without direction. Once you know how to do something, doing something isn’t hard. Let’s see one way to architect your networking layer that you can consider as a direction to write your own.</p>
+
+<p>There are three concerns that need to be addressed when dealing with Networking:</p>
+<ol>
+  <li>Send a request to a server for a resource</li>
+  <li>Get a response back</li>
+  <li>Parse responses into native swift types</li>
+</ol>
+
+<p>We’ll see how to address each of this with Swift.</p>
+
+<ul>
+  <li>Send a request to a server for a resource</li>
+  <li>Get a response back</li>
+</ul>
+
+<p>Usually when you’re sending a request over to a server, it’s for a resource of some kind. This could be a post, an article, a movie, or anything. Let’s call this a resource from now.</p>
+
+<p>We could handle this by having a class do that for us, say a <strong>Webservice</strong> class that could <code class="highlighter-rouge">load</code> a resource, that returns a response.</p>
+
+<ul>
+  <li>Parse responses into native swift types</li>
+</ul>
+
+<p>Usually the responses we get back from server these days is in JSON. So, the task at hand is to parse JSON into native swift types. There are many ways to do this, but let’s see how to handle it so its nicer and cleaner and in a way you don’t have to deal with it each and every time you need to request for a response.</p>
+
+<p>Let’s assume we have the following milestones:</p>
+
+<p><strong>Milestone One</strong>: Get Binary Data<br />
+<strong>Milestone Two</strong>: Data —&gt; JSON  —&gt; Native Types<br />
+<strong>Milestone Three</strong>: Clean up</p>
+
+<h2 id="webservice--class-that-handles-requests">Webservice — Class that handles requests</h2>
+<p>We need a way to send requests to a server for a resource, don’t we? We’ll call that class <code class="highlighter-rouge">Webservice</code>. This class could have a method <code class="highlighter-rouge">load</code> that could be responsible to <code class="highlighter-rouge">load</code> a <code class="highlighter-rouge">resource</code>. We’ll see how to build this out in a while.</p>
+
+<h2 id="resource">Resource</h2>
+<p>We also need a way to tell the Webservice class to load a <code class="highlighter-rouge">resource</code>, we can accomplish that by having a <code class="highlighter-rouge">Resource</code> object that encapsulates the request <code class="highlighter-rouge">URL</code> and a way to parse the response.</p>
+
+<h2 id="model--native-swift-objects-with-value-types">Model — Native Swift Objects with Value Types</h2>
+<p>Finally, you need native types of the data that you receive from the server to be able to use it across the app. We’ll use structs for each model to address that.</p>
+
+<h2 id="code">Code</h2>
+
+<p>Example:</p>
+
+<p>Let’s assume we have json data being served from a server that looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Pulp Fiction"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span><span class="s">"Samuel L Jackson"</span><span class="p">,</span> <span class="s">"John Travolta"</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Ocean's Eleven"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span><span class="s">"George Clooney"</span><span class="p">,</span> <span class="s">"Brad Pitt"</span><span class="p">,</span> <span class="s">"Matt Damon"</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Goodfellas"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span><span class="s">"Robert De Niro"</span><span class="p">,</span> <span class="s">"Ray Liotta"</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"I Am Sam"</span><span class="p">,</span>
+    <span class="s">"actors"</span><span class="p">:</span> <span class="p">[</span><span class="s">"Sean Penn"</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>For the sake of this example, we’ll put this data in a file called <code class="highlighter-rouge">movies.json</code>, and try to build a networking layer in Swift that parses this data into native types.</p>
+
+<h3 id="resource-1">Resource</h3>
+
+<p>The <code class="highlighter-rouge">Resource</code> is a struct that encapsulates the <code class="highlighter-rouge">url</code> and a way to parse, a parse function, that helps parse the data from the URL. For example, In our case we could have a <code class="highlighter-rouge">MoviesResource</code> that could retrieve movies.</p>
+
+<p>We could model Resource like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="kt">A</span><span class="o">&gt;</span> <span class="p">{</span>
+ <span class="k">let</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span>
+ <span class="k">let</span> <span class="nv">parse</span><span class="p">:</span> <span class="p">(</span><span class="kt">Data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">A</span><span class="p">?</span>
+<span class="p">}</span></code></pre></figure>
+
+<ul>
+  <li>URL: A <code class="highlighter-rouge">url</code> property that denotes the URL of the resource</li>
+  <li><code class="highlighter-rouge">parse</code> function: A function that takes some <code class="highlighter-rouge">Data</code> and returns an object of the associated resource.</li>
+</ul>
+
+<p>Let’s write an initialiser for a <code class="highlighter-rouge">Resource</code> in an extension like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">Resource</span> <span class="p">{</span>
+ <span class="nf">init</span><span class="p">?(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">parse</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">A</span><span class="p">?)</span> <span class="p">{</span>
+   <span class="k">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+   <span class="k">self</span><span class="o">.</span><span class="n">parse</span> <span class="o">=</span> <span class="n">parse</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Here, along with the URL, we’re just passing a closure to the parse parameter and assigning it to the resource’s parse property.</p>
+
+<p>Now, a movies resource could be initialised like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">url</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"http://localhost:8080/movies.json"</span><span class="p">)</span><span class="o">!</span>
+<span class="k">let</span> <span class="nv">moviesResource</span> <span class="o">=</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="kt">Data</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span> <span class="k">in</span>
+ <span class="k">return</span> <span class="n">data</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="webservice">Webservice</h3>
+<p>Now that we’ve seen how we could create a Resource type for our data, we need a way for us to fetch the data from the server.</p>
+
+<p>Luckily the <code class="highlighter-rouge">URLSession</code> class offers a way for us to do this easily without having to use any third party libraries, we’ll wrap this up in a function within a <code class="highlighter-rouge">Webservice</code> class so we could use it.</p>
+
+<p>We could write this like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">final</span> <span class="kd">class</span> <span class="kt">Webservice</span> <span class="p">{</span>
+ <span class="kd">func</span> <span class="n">load</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())</span> <span class="p">{</span>
+   <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">resource</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">_</span> <span class="p">\</span><span class="n">_</span><span class="p">)</span> <span class="k">in</span>
+     <span class="nf">completion</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+   <span class="p">}</span><span class="o">.</span><span class="nf">resume</span><span class="p">()</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>We’re simply using a shared URLSession object to call the following method</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Data</span><span class="p">?,</span> <span class="kt">URLResponse</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre></figure>
+
+<p>with the resource’s URL parameter and call the completion with data, this will just call the closure with whatever data it retrieves at this point.</p>
+
+<p>We could now use the Webservice by creating an instance of it like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">sharedWS</span> <span class="o">=</span> <span class="kt">Webservice</span><span class="p">()</span>
+<span class="n">sharedWS</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="n">moviesResource</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">in</span>
+ <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This should return whatever the size of the data it retrieved was, when you run it a playground, you get something like this –&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Optional</span><span class="p">(</span><span class="mi">324</span> <span class="n">bytes</span><span class="p">)</span></code></pre></figure>
+
+<p>Now, this means we have a service trying to communicate with the server and returning response, but the response is in binary and not useful for us.</p>
+
+<p>🏁  <strong>We have now reached Milestone One.</strong></p>
+
+<p>We’ll see how to get meaningful data and parse it to native types so we can use it.</p>
+
+<h3 id="models">Models</h3>
+<p>Looking at the JSON data, we figure that we need a <code class="highlighter-rouge">Movie</code> type to represent the movies, and possibly an <code class="highlighter-rouge">Actor</code> type with a name property that can hold their names.</p>
+
+<p>We could model this with native types like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Actor</span>
+<span class="kd">struct</span> <span class="kt">Actor</span> <span class="p">{</span>
+ <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
+<span class="p">}</span>
+
+<span class="c1">// Movie</span>
+<span class="kd">struct</span> <span class="kt">Movie</span> <span class="p">{</span>
+ <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span>
+ <span class="k">let</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Actor</span><span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>We now need a way to model JSON data with native types, we could use a type alias for a dictionary like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">typealias</span> <span class="kt">JSONDictionary</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">]</span></code></pre></figure>
+
+<p>We can now write an initialiser for a <code class="highlighter-rouge">Movie</code> like this —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">Movie</span> <span class="p">{</span>
+ <span class="nf">init</span><span class="p">?(</span><span class="nv">dictionary</span><span class="p">:</span> <span class="kt">JSONDictionary</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">guard</span> <span class="k">let</span> <span class="nv">title</span> <span class="o">=</span> <span class="n">dictionary</span><span class="p">[</span><span class="s">"title"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span><span class="p">,</span>
+     <span class="k">let</span> <span class="nv">actors</span> <span class="o">=</span> <span class="n">dictionary</span><span class="p">[</span><span class="s">"actors"</span><span class="p">]</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+   <span class="k">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+   <span class="k">self</span><span class="o">.</span><span class="n">actors</span> <span class="o">=</span> <span class="n">actors</span><span class="o">.</span><span class="nf">flatMap</span><span class="p">(</span><span class="kt">Actor</span><span class="o">.</span><span class="kd">init</span><span class="p">)</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>What’s happening here is pretty straightforward —&gt;</p>
+
+<p>The <code class="highlighter-rouge">guard</code> statement pulls out our fields <code class="highlighter-rouge">title</code> and <code class="highlighter-rouge">actors</code> from the dictionary, which is of type <code class="highlighter-rouge">JSONDictionary</code> and assigns it to the respective properties. We also <code class="highlighter-rouge">flatMap</code> the <code class="highlighter-rouge">actors</code> string and pass each string to the <code class="highlighter-rouge">Actor</code>’s init to instantiate actor objects within the Movie.</p>
+
+<p>Now that we have a way to create <code class="highlighter-rouge">Movie</code> objects, let’s rewrite our <code class="highlighter-rouge">moviesResource</code> to return them —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">moviesResource</span> <span class="o">=</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Movie</span><span class="p">]</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span> <span class="k">in</span>
+ <span class="k">let</span> <span class="nv">json</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">JSONSerialization</span><span class="o">.</span><span class="nf">jsonObject</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[])</span>
+ <span class="k">guard</span> <span class="k">let</span> <span class="nv">dictionaries</span> <span class="o">=</span> <span class="n">json</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">JSONDictionary</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+ <span class="k">return</span> <span class="n">dictionaries</span><span class="o">.</span><span class="nf">flatMap</span><span class="p">(</span><span class="kt">Movie</span><span class="o">.</span><span class="kd">init</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>We do the following here:</p>
+<ul>
+  <li>Instantiate <code class="highlighter-rouge">moviesResource</code> as a <code class="highlighter-rouge">Resource</code> that returns array of <code class="highlighter-rouge">Movie</code> objects</li>
+  <li>Use <code class="highlighter-rouge">JSONSerialization</code> class to convert our data (<code class="highlighter-rouge">Data</code>) object into json <code class="highlighter-rouge">JSON</code></li>
+  <li>Typecast <code class="highlighter-rouge">json</code> into an array of <code class="highlighter-rouge">JSONDictioanry</code> objects</li>
+  <li><code class="highlighter-rouge">flatMap</code> over the <code class="highlighter-rouge">dictionaries</code> array to instantiate a <code class="highlighter-rouge">Movie</code> with each block of json</li>
+</ul>
+
+<p>We now have a process setup that can parse the data into our required objects, but we still haven’t updated our <code class="highlighter-rouge">load</code> method to make use of the <code class="highlighter-rouge">parse</code> method that we’ve modified above.</p>
+
+<p>This can look like —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Webservice</span> <span class="p">{</span>
+   <span class="kd">func</span> <span class="n">load</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())</span> <span class="p">{</span>
+     <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">resource</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">\</span><span class="n">_</span><span class="p">,</span> <span class="p">\</span><span class="n">_</span><span class="p">)</span> <span class="k">in</span>
+       <span class="nf">completion</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="nf">flatMap</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">parse</span><span class="p">))</span>
+     <span class="p">}</span><span class="o">.</span><span class="nf">resume</span><span class="p">()</span>
+   <span class="p">}</span>
+<span class="err">'</span> <span class="p">}</span></code></pre></figure>
+
+<p>We modify our <code class="highlighter-rouge">load</code> method for a resource type <code class="highlighter-rouge">T</code> inside which we simply try to <code class="highlighter-rouge">flatMap</code> over the stream of data that gets loaded as <code class="highlighter-rouge">Data</code>, thanks to <code class="highlighter-rouge">URSession</code>,  and pass the resource’s <code class="highlighter-rouge">parse</code> method to it so the parse functionality we’ve written is useful, and send it to the completion handler.</p>
+
+<p>Now, let’s see what data we’re able to load with our web service —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">sharedWS</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="n">moviesResource</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">in</span>
+ <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>If you run this in a playground, you should see something like this —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Optional</span><span class="p">([</span><span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Movie</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Pulp Fiction"</span><span class="p">,</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Actor</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Samuel L Jackson"</span><span class="p">),</span> <span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Actor</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"John Travolta"</span><span class="p">)]),</span> <span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Movie</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Ocean</span><span class="se">\'</span><span class="s">s Eleven"</span><span class="p">,</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Actor</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"George Clooney"</span><span class="p">),</span> <span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Actor</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Brad Pitt"</span><span class="p">),</span> <span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Actor</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Matt Damon"</span><span class="p">)]),</span> <span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Movie</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Goodfellas"</span><span class="p">,</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Actor</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Robert Di Niro"</span><span class="p">)]),</span> <span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Movie</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"I Am Sam"</span><span class="p">,</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="n">__lldb_expr_55</span><span class="o">.</span><span class="kt">Actor</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Sean Penn"</span><span class="p">)])])</span></code></pre></figure>
+
+<p>Which means good news. You’re now able to get native objects from the json now.</p>
+
+<p>We could refactor the load method to give us something nicer —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">sharedWS</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="n">moviesResource</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">in</span>
+ <span class="k">guard</span> <span class="k">let</span> <span class="nv">movies</span> <span class="o">=</span> <span class="n">result</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">Movie</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+ <span class="k">for</span> <span class="n">movie</span> <span class="k">in</span> <span class="n">movies</span> <span class="p">{</span>
+   <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">Movie: </span><span class="se">\(</span><span class="n">movie</span><span class="o">.</span><span class="n">title</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+   <span class="k">for</span> <span class="n">actor</span> <span class="k">in</span> <span class="n">movie</span><span class="o">.</span><span class="n">actors</span> <span class="p">{</span>
+     <span class="nf">print</span><span class="p">(</span><span class="s">"Actor: </span><span class="se">\(</span><span class="n">actor</span><span class="o">.</span><span class="n">name</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+   <span class="p">}</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You’ll see this prettified output —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"> <span class="na">Movie</span><span class="pi">:</span> <span class="s">Pulp Fiction</span>
+ <span class="na">Actor</span><span class="pi">:</span> <span class="s">Samuel L Jackson</span>
+ <span class="na">Actor</span><span class="pi">:</span> <span class="s">John Travolta</span>
+ 
+ <span class="na">Movie</span><span class="pi">:</span> <span class="s">Ocean's Eleven</span>
+ <span class="na">Actor</span><span class="pi">:</span> <span class="s">George Clooney</span>
+ <span class="na">Actor</span><span class="pi">:</span> <span class="s">Brad Pitt</span>
+ <span class="na">Actor</span><span class="pi">:</span> <span class="s">Matt Damon</span>
+ 
+ <span class="na">Movie</span><span class="pi">:</span> <span class="s">Goodfellas</span>
+ <span class="na">Actor</span><span class="pi">:</span> <span class="s">Robert Di Niro</span>
+ 
+ <span class="na">Movie</span><span class="pi">:</span> <span class="s">I Am Sam</span>
+ <span class="na">Actor</span><span class="pi">:</span> <span class="s">Sean Penn</span></code></pre></figure>
+
+<p>🏁 <strong>We have now reached Milestone Two.</strong></p>
+
+<h2 id="refactor">Refactor</h2>
+<p>Now that we’ve seen how to get to what we need, we could get to cleaning up the code a bit, and refactoring it to make it much nicer.</p>
+
+<p>We could start by moving our <code class="highlighter-rouge">moviesResource</code> into the <code class="highlighter-rouge">Movie</code> struct to make it more concise using an <code class="highlighter-rouge">all</code> property —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Movie</span> <span class="p">{</span>
+ <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span>
+ <span class="k">let</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Actor</span><span class="p">]</span>
+ 
+ <span class="kd">static</span> <span class="k">let</span> <span class="nv">all</span> <span class="o">=</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Movie</span><span class="p">]</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span> <span class="k">in</span>
+   <span class="k">let</span> <span class="nv">json</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">JSONSerialization</span><span class="o">.</span><span class="nf">jsonObject</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[])</span>
+   <span class="k">guard</span> <span class="k">let</span> <span class="nv">dictionaries</span> <span class="o">=</span> <span class="n">json</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">JSONDictionary</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+   <span class="k">return</span> <span class="n">dictionaries</span><span class="o">.</span><span class="nf">flatMap</span><span class="p">(</span><span class="kt">Movie</span><span class="o">.</span><span class="kd">init</span><span class="p">)</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>We could also simplify this further by abstracting away the <code class="highlighter-rouge">JSON</code> decoding part to the <code class="highlighter-rouge">Resource</code> type by creating an extension —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">Resource</span> <span class="p">{</span>
+ <span class="nf">init</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">parseJSON</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">A</span><span class="p">?)</span> <span class="p">{</span>
+   <span class="k">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+   <span class="k">self</span><span class="o">.</span><span class="n">parse</span> <span class="o">=</span> <span class="p">{</span> <span class="n">data</span> <span class="k">in</span>
+     <span class="k">let</span> <span class="nv">json</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">JSONSerialization</span><span class="o">.</span><span class="nf">jsonObject</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[])</span>
+     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="nf">flatMap</span><span class="p">(</span><span class="n">parseJSON</span><span class="p">)</span>
+   <span class="p">}</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Here, we convert <code class="highlighter-rouge">data</code> object into JSON and <code class="highlighter-rouge">flatMap</code> over it to recursively parse the closure to parse the json data, now our <code class="highlighter-rouge">Resource</code> could become simpler —&gt;</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Movie</span> <span class="p">{</span>
+ <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span>
+ <span class="k">let</span> <span class="nv">actors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Actor</span><span class="p">]</span>
+ 
+ <span class="kd">static</span> <span class="k">let</span> <span class="nv">all</span> <span class="o">=</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Movie</span><span class="p">]</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="n">json</span> <span class="k">in</span>
+   <span class="k">guard</span> <span class="k">let</span> <span class="nv">dictionaries</span> <span class="o">=</span> <span class="n">json</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">JSONDictionary</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+   <span class="k">return</span> <span class="n">dictionaries</span><span class="o">.</span><span class="nf">flatMap</span><span class="p">(</span><span class="kt">Movie</span><span class="o">.</span><span class="kd">init</span><span class="p">)</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>🏁 <strong>We have now reached our final milestone, Milestone Three.</strong></p>
+
+<p>Now, we have code that’s cleaner, concise and keeps concerns separate. This pattern can be followed with whatever Resource that you want to work with.</p>
+
+<p>You can download the files we worked with incase you want to try it our yourself:</p>
+
+<ul>
+  <li><a href="https://gist.github.com/arvindravi/5be87b14b9782a2b0957863310d87af7">movies.json</a></li>
+  <li><a href="https://www.dropbox.com/s/zyryg0qtvxvqisq/Networking.playground.zip?dl=0">Neworking.playground</a></li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>So, that was about how to write a Networking layer without any 3rd party libraries. Feel free to leave any feedback or questions!</p>
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=Networking+with+Swift - http://arvindravi.com/posts/networking-with-swift by @arvindravi_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://arvindravi.com/posts/networking-with-swift" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=http://arvindravi.com/posts/networking-with-swift" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://arvindravi.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    © Arvind Ravi
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-37200107-6','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/assets/vendor-d95a8f71766d2efbcd7abf3bce924b22e1f6e46c0ce250b0abbdb19e1611dfb9.js"></script>
+
+
+
+  <script src="/assets/webfonts-b43bedd6aeaea7f39fa218abef200a1a7b9f319317a4a2c437eafba5cb04149d.js"></script>
+
+
+
+
+  <script src="/assets/scrollappear-be8da54bea4794209255bc7a9b8b2266fbd9d1db597964d66469f230dacf59f8.js"></script>
+
+
+
+<script src="/assets/application-a9813e7f426d2e264d63b6b67e8691cc3949233038e5df69736eebd0c28a6438.js"></script>
+
+
+</body>
+</html>

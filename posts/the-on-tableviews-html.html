@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Arvind Ravi | On Tableviews</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="On Tableviews">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://arvindravi.com/posts/the-on-tableviews-html">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Arvind Ravi">
+  <meta property="og:image" content="http://arvindravi.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://arvindravi.com/posts/the-on-tableviews-html">
+  <meta name="twitter:title" content="On Tableviews">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="http://arvindravi.com/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-1257007127614c626d7bbcd3bb62241c0f45a0cded0baacc45a03b27d61423c3.png">
+  <link href="http://arvindravi.com/feed.xml" type="application/rss+xml" rel="alternate" title="Arvind Ravi Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/assets/light-4f0137368429498e4edab07006e01c74914df7697c3e8b6cb3ec10fe1454720b.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/" class="header-logo" title="Arvind Ravi">Arvind Ravi</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/arvindravi_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://dribbble.com/arvindravi" rel="noreferrer noopener" target="_blank" title="Dribbble">
+          <span class="icon icon-dribbble"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:hello@arvindravi.com" title="Email">
+          <span class="icon icon-email"></span>
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>On Tableviews</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                May 4, 2017
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  5 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/swift">swift</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <p>You’re always trying to show tables of something to people. Always.</p>
+
+<p>The <em>UITableView &amp; UITableViewController</em> classes, help you specifically with
+that.</p>
+
+<p>In this blog, we’ll discover how to use them.</p>
+
+<h4 id="uitableview"><strong>UITableView</strong></h4>
+
+<p>The UITableView class of the iOS API, is quite robust and powers millions of
+tables on iOS across the world.</p>
+
+<p><em>UITableView</em> is a view component that can be used to display a list of items in
+a table, and can be embedded into a view. If you’re simply looking to implement
+a quick hassle-free and a straight forward table, the <em>UITableViewController</em>
+object is the way to go.</p>
+
+<h4 id="uitableviewcontroller"><strong>UITableViewController</strong></h4>
+
+<p><em>UITableViewController = UITableView + UIViewController</em></p>
+
+<p>The UITableViewController is a subclass of UIViewController that manages a table
+view, and can be used independantly.</p>
+
+<h4 id="how-to"><strong>How to?</strong></h4>
+
+<p>Now that we have an idea about how tables are used, let’s look at how to
+implement them.</p>
+
+<p>The <em>UITableView</em> requires two things to function:</p>
+
+<ul>
+  <li>Datasource</li>
+  <li>Delegate</li>
+</ul>
+
+<p>The Datasource provides all things content, or the data for the table, and other
+information that the table needs to construct the table.</p>
+
+<p>The Delegate manages the table configuration, selection, editing, and other
+interactions.</p>
+
+<p>Usually the view controller that manages the tableview acts as the Datasource
+and Delegate for the corresponding table. This is accompolished by making the
+View Controller adopt the following protocols:</p>
+
+<ul>
+  <li>
+    <p><strong>UITableViewDataSource</strong>: <em>for the datasource methods</em></p>
+  </li>
+  <li>
+    <p><strong>UITableViewDelegate</strong>: <em>for the delegate methods</em></p>
+  </li>
+</ul>
+
+<p>I have personally only used IB and AutoLayout to create my UIs so far, but to
+move away from this practice and to start writing UIs programmatically, I’m
+going to stick to creating UIs programmatically in these posts that I write in
+the hope that I learn along the way. If you need help setting up XCode without
+storyboards, give
+<a href="https://medium.com/ios-os-x-development/ios-start-an-app-without-storyboard-5f57e3251a25">this</a>
+article a quick read.</p>
+
+<h4 id="step-i"><strong>Step I:</strong></h4>
+
+<p><strong>Prepare Items &amp; Table view</strong></p>
+
+<p>In <em>ViewController.swift</em>, intialize two variables — one that holds a new
+<em>UITableView</em> object and the other that holds the items that you’re going to
+display in the table.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span> <span class="o">=</span> <span class="kt">UITableView</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">"One"</span><span class="p">,</span> <span class="s">"Two"</span><span class="p">,</span> <span class="s">"Three"</span><span class="p">]</span></code></pre></figure>
+
+<h4 id="step-ii"><strong>Step II:</strong></h4>
+
+<p><strong>Configure TableView</strong></p>
+
+<p>Before adding our tableview to our view, there are three things that we need to
+take care of:</p>
+
+<ul>
+  <li>The Table View’s <strong>Frame</strong> in the view</li>
+  <li>The Table View’s <strong>Datasource</strong> and <strong>Delegate</strong></li>
+  <li>The Table View’s <strong>Cell Reuse Identifier</strong></li>
+</ul>
+
+<p>In your <em>viewWillAppear()</em> method:</p>
+
+<ol>
+  <li><strong>Setup Frame:</strong></li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">screenSize</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="o">=</span> <span class="kt">UIScreen</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">bounds</span>
+<span class="k">let</span> <span class="nv">width</span> <span class="o">=</span> <span class="n">screenSize</span><span class="o">.</span><span class="n">width</span>
+<span class="k">let</span> <span class="nv">height</span> <span class="o">=</span> <span class="n">screenSize</span><span class="o">.</span><span class="n">height</span>
+
+<span class="n">tableView</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="kt">CGRect</span><span class="p">(</span><span class="nv">x</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">y</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="n">height</span><span class="p">)</span></code></pre></figure>
+
+<p>There are two things happening here:</p>
+
+<ul>
+  <li>We’re obtaining the screen’s width and height using the bounds property of our
+UIScreen — <strong>UIScreen.main.bounds</strong></li>
+  <li>Setting our Table View’s frame using the <em>frame</em> property on our table view —
+<strong>tableview.frame</strong></li>
+</ul>
+
+<ol>
+  <li><strong>Set Table View’s Datasource and Delegate</strong></li>
+</ol>
+
+<p>After setting the tableview’s frame, we may now set the tableview’s datasource
+and delegate to our own class that implements the tableview. In this case, *self
+*points to our *ViewController *class.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">tableView</span><span class="o">.</span><span class="n">dataSource</span> <span class="o">=</span> <span class="k">self</span>
+<span class="n">tableView</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span></code></pre></figure>
+
+<p>After setting the tableview’s datasource and delegate, its important we
+implement the datasource and delegate methods.</p>
+
+<ol>
+  <li><strong>Set Reuse Identifier</strong></li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">tableView</span><span class="o">.</span><span class="nf">register</span><span class="p">(</span><span class="kt">UITableViewCell</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">forCellReuseIdentifier</span><span class="p">:</span> <span class="s">"cell"</span><span class="p">)</span></code></pre></figure>
+
+<p>Set the reuse identifier that you would like to use for the cell, so the cell
+instance can be reused during run time.</p>
+
+<h4 id="step-iii">Step III:</h4>
+
+<p><strong>Implement Datasource &amp; Delegate Methods</strong></p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">  <span class="kd">extension</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UITableViewDataSource</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">numberOfSections</span><span class="p">(</span><span class="k">in</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="mi">1</span> 
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">numberOfRowsInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">items</span><span class="o">.</span><span class="n">count</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
+      <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"cell"</span><span class="p">,</span> <span class="nv">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span>
+      <span class="n">cell</span><span class="o">.</span><span class="n">textLabel</span><span class="p">?</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">]</span>
+      <span class="k">return</span> <span class="n">cell</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>What’s happening here?</p>
+
+<p>I like to use extensions to keep things clean and modular —</p>
+
+<p>We first create an extension to our class, and make the class adopt to the
+<em>UITableViewDataSource</em> protocol.</p>
+
+<p>The tableview requests its datasource for information regarding the structure of
+the table to build it.</p>
+
+<p>Within the extension, there are three methods that have been implemented:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">numberOfSections</span><span class="p">(</span><span class="k">in</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre></figure>
+
+<p>This specifies the number of sections that the table is going to have.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">numberOfRowsInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre></figure>
+
+<p>This returns the total number of rows the table will have. Ideally we return the
+count of our datasource (in our case an array of items) — <em>items.count</em></p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span></code></pre></figure>
+
+<p>This returns an instance of the tableview cell for an index path. This is where
+the data binding usually happens.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"cell"</span><span class="p">,</span> <span class="nv">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span>
+<span class="n">cell</span><span class="o">.</span><span class="n">textLabel</span><span class="p">?</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">]</span>
+<span class="k">return</span> <span class="n">cell</span></code></pre></figure>
+
+<ul>
+  <li>A tableview cell is dequeued for the correspoding indexpath</li>
+  <li>The cell’s textLabel property holds the text from our array</li>
+  <li>The Cell is returned</li>
+</ul>
+
+<h4 id="step-iv">Step IV:</h4>
+
+<p><strong>Adding Table View to the View</strong></p>
+
+<p>Now that our Table View has been setup, all that’s left is adding it to our
+view.</p>
+
+<p>In your *viewDidLoad() *method:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">view</span><span class="o">.</span><span class="nf">addSubview</span><span class="p">(</span><span class="n">tableView</span><span class="p">)</span></code></pre></figure>
+
+<p>Now when you Build and Run, you should see your table populated with the data
+from the items array.</p>
+
+<p>That’s how a simple table is created, a complex one builds over the same
+concepts and a cell could be designed to hold text, images, and even videos.</p>
+
+<p>I hope that was useful.</p>
+
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=On+Tableviews - http://arvindravi.com/posts/the-on-tableviews-html by @arvindravi_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://arvindravi.com/posts/the-on-tableviews-html" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=http://arvindravi.com/posts/the-on-tableviews-html" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://arvindravi.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    © Arvind Ravi
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-37200107-6','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/assets/vendor-d95a8f71766d2efbcd7abf3bce924b22e1f6e46c0ce250b0abbdb19e1611dfb9.js"></script>
+
+
+
+  <script src="/assets/webfonts-b43bedd6aeaea7f39fa218abef200a1a7b9f319317a4a2c437eafba5cb04149d.js"></script>
+
+
+
+
+  <script src="/assets/scrollappear-be8da54bea4794209255bc7a9b8b2266fbd9d1db597964d66469f230dacf59f8.js"></script>
+
+
+
+<script src="/assets/application-a9813e7f426d2e264d63b6b67e8691cc3949233038e5df69736eebd0c28a6438.js"></script>
+
+
+</body>
+</html>

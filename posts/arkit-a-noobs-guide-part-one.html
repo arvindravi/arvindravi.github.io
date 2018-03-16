@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Arvind Ravi | ARKit: A Noob's Guide - Part I</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="ARKit: A Noob&#39;s Guide - Part I">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://arvindravi.com/posts/arkit-a-noobs-guide-part-one">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Arvind Ravi">
+  <meta property="og:image" content="http://arvindravi.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://arvindravi.com/posts/arkit-a-noobs-guide-part-one">
+  <meta name="twitter:title" content="ARKit: A Noob&#39;s Guide - Part I">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="http://arvindravi.com/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-1257007127614c626d7bbcd3bb62241c0f45a0cded0baacc45a03b27d61423c3.png">
+  <link href="http://arvindravi.com/feed.xml" type="application/rss+xml" rel="alternate" title="Arvind Ravi Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/assets/light-4f0137368429498e4edab07006e01c74914df7697c3e8b6cb3ec10fe1454720b.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/" class="header-logo" title="Arvind Ravi">Arvind Ravi</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/arvindravi_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://dribbble.com/arvindravi" rel="noreferrer noopener" target="_blank" title="Dribbble">
+          <span class="icon icon-dribbble"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:hello@arvindravi.com" title="Email">
+          <span class="icon icon-email"></span>
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>ARKit: A Noob's Guide - Part I</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                September 24, 2017
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  5 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/swift">swift</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <h2 id="part-i-introducing-arkit-">Part I: Introducing ARKit 🔮</h2>
+<p>ARKit is the new kid on the block. It’s the shiny new Apple’s framework on the iOS Platform to develop Augmented Reality apps and games. Its pretty cool actually. I will try to not bore you to death and tell you things you need to  know. 
+To get started.
+Like right away.</p>
+
+<h3 id="what-can-it-do">What can it do?</h3>
+<p>ARKit is a library that’s going to change how people interacted with their phones, I say this because the iPhone is a popular device, and iOS is a popular platform. 
+Come on, admit it.</p>
+
+<p>With ARKit, you can:</p>
+
+<ul>
+  <li>Detect plane surfaces</li>
+  <li>Place 3D virtual objects around you</li>
+  <li>Interact with it, <em>using your device</em></li>
+  <li>Track its position in real time</li>
+</ul>
+
+<h3 id="what-do-i-need">What do I need?</h3>
+<p>To be able to use ARKit, or write code for it you need an  device with A9 processor or better. Like A10. Or A11.</p>
+
+<p>See if you have one of these, if you do, you’re good to go:</p>
+<ul>
+  <li>iPhone 6s and 6s Plus</li>
+  <li>iPhone 7 and 7 Plus</li>
+  <li>iPhone SE</li>
+  <li>iPad Pro (<em>both 1st gen and 2nd gen</em>)</li>
+  <li>iPad (2017)</li>
+  <li>iPhone 8 and 8 Plus</li>
+  <li>iPhone X</li>
+</ul>
+
+<h3 id="arkit-the-basics">ARKit: The Basics</h3>
+<p>Let’s get right into it. There are a few ARKit-ty stuff (<em>more like classes, but oh well</em>) you need to understand before you’re ready to take ARKit for a spin:</p>
+
+<ul>
+  <li>ARWorldTrackingConfiguration</li>
+  <li>ARSession</li>
+  <li>ARSCNView</li>
+  <li>ARAnchor</li>
+  <li>ARPlaneAnchor</li>
+</ul>
+
+<h4 id="arworldtrackingconfiguration"><b>ARWorldTrackingConfiguration</b></h4>
+
+<p>The <strong>ARConfiguration</strong> class  deals with establishing a relationship between the real world where the device is, and the virtual co-ordinate space where content can be modelled. The <strong>ARWorldTrackingConfiguration</strong> class is a subclass of ARConfiguration, and this is responsible for tracking the device’s movement with six degrees of freedom (<em>6DOF</em>). 
+The six degrees of freedom represent the freedom of movement of an object in three-dimensional space, like so:</p>
+
+<p><strong>Rotation Axes</strong>:</p>
+<ul>
+  <li>Roll</li>
+  <li>Pitch</li>
+  <li>Yaw</li>
+</ul>
+
+<p><strong>Translation Axes</strong>:</p>
+<ul>
+  <li>Movement in x</li>
+  <li>Movement in y</li>
+  <li>Movement in z</li>
+</ul>
+
+<p>You can count, there are six.</p>
+
+<p>Let’s now get to initialising an ARWorldTrackingConfiguration object, that we can create an ARSession with.</p>
+
+<blockquote>
+  <p>Pro-tip: When initialising an <strong>ARWorldTrackingConfiguration</strong>, you can optionally set <code class="highlighter-rouge">.horizontal</code> to a property called <code class="highlighter-rouge">planeDetection</code> to enable plane detection in your session.</p>
+</blockquote>
+
+<p><strong>Code</strong></p>
+<ul>
+  <li>Instantiating a session configuration</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">ARWorldTrackingConfiguration</span><span class="p">()</span></code></pre></figure>
+
+<h4 id="arsession"><b>ARSession</b></h4>
+<p>Every AR experience built with ARKit, relies on a ARSession object to manage the session. This object co-ordinates with your device’s camera, the motion sensors, and performs image analysis on the capture frames.</p>
+
+<p>The building block of an AR experience, is the <strong>ARSession</strong>, and it’s the session is run with a {session configuration} object.</p>
+
+<p>There are two parts to running an ARSession:</p>
+<ol>
+  <li>Instantiate an ARSession object</li>
+  <li>Call <code class="highlighter-rouge">run()</code> on the ARSession object passing a session configuration object</li>
+</ol>
+
+<p><strong>Code</strong></p>
+<ul>
+  <li>Creating an ARSession</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">session</span> <span class="o">=</span> <span class="kt">ARSession</span><span class="p">()</span></code></pre></figure>
+
+<ul>
+  <li>Running the session</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">session</span><span class="o">.</span><span class="nf">run</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span></code></pre></figure>
+
+<h4 id="arscnview"><b>ARSCNView</b></h4>
+<p>If you’re already familiar with SceneKit, the <strong>ARSCNView</strong> is a subclass of <strong>SCNView</strong> that comes with all what you need to setup an AR experience using SceneKit.</p>
+
+<p>ARSCNView is used to display a camera and any 3D content that you will be adding to your scene. Pretty much, the view port of your AR experience.</p>
+
+<p>How can you use it? It’s not very hard. You simply create an AR session, and bind that to the <code class="highlighter-rouge">session</code> property of your ARSCNview instance.</p>
+
+<p><strong>Code</strong></p>
+<ul>
+  <li>Creating an ARSCNView instance</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">sceneView</span> <span class="o">=</span> <span class="kt">ARSCNView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">UIScreen</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>Binding a session to it</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">session</span> <span class="o">=</span> <span class="kt">ARSession</span><span class="p">()</span><span class="err"> </span>
+<span class="n">sceneView</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span></code></pre></figure>
+
+<h4 id="aranchor"><b>ARAnchor</b></h4>
+<p>Once you know the fundamentals of how to run an ARSession, let’s see what you can do with a running ARSession. You can add stuff to it. I mean, anything. Even 3D 💩, and Craig would even <a href="https://youtu.be/ap8NuYWmFh0?t=2m6s">appreciate</a> it.</p>
+
+<p>There’s a concept of anchors in a session, it’s not rocket science — you basically add anchor objects to a AR session that’s running, and your device tracks its position and orientation of whatever you add to the session. Let’s go over how to create an ARAnchor object and add it to a session.</p>
+
+<p>However, to create an AR Anchor, you need a matrix that encodes the position, orientation, and scale of the anchor relative to the world co-ordinate space of the session the anchor is in. That sounds tricky? A little. But all you need to understand is, that this matrix is of the type <code class="highlighter-rouge">matrix_float4x4</code> in Swift.</p>
+
+<p>This value can be obtained based on where you want to place your anchor, one of the ways is to grab the <strong>ARCamera</strong>’s transform property and bind that to the anchor, to place an anchor in front of the camera.</p>
+
+<p><strong>Code</strong></p>
+<ul>
+  <li>Getting a transform (<em>let’s grab the camera transform</em>)</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">transform</span> <span class="o">=</span> <span class="n">sceneView</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">currentFrame</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">transform</span></code></pre></figure>
+
+<p><em>Here, you grab the camera from the currentFrame (an ARFrame) and use its transform property</em></p>
+
+<ul>
+  <li>Creating an ARAnchor</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">anchor</span> <span class="o">=</span> <span class="kt">ARAnchor</span><span class="p">(</span><span class="nv">transform</span><span class="p">:</span> <span class="n">transform</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>Adding an anchor to the session</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">sceneView</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">anchor</span><span class="p">:</span> <span class="n">anchor</span><span class="p">)</span></code></pre></figure>
+
+<p>Yes, it’s as simple as that.</p>
+
+<h4 id="arplaneanchor"><b>ARPlaneAnchor</b></h4>
+<p>The <strong>ARPlaneAnchor</strong> is a subclass of an <strong>ARAnchor</strong>, with one cool fact —</p>
+
+<p><em>ARPlaneAnchor objects get added to the session automatically when plane detection is enabled.</em></p>
+
+<p>We’ll go into detail about how ARPlaneAnchor objects are added to the session, and how they can be used when we’re discussing about detecting planes in the next part of the guide.</p>
+
+<p>An ARPlaneAnchor has some useful properties:</p>
+<ul>
+  <li><code class="highlighter-rouge">alignment</code></li>
+  <li><code class="highlighter-rouge">center</code></li>
+  <li><code class="highlighter-rouge">extent</code></li>
+</ul>
+
+<p>These properties help place 3D planes to the scene when plane surfaces are detected.</p>
+
+<hr />
+<p><br /></p>
+<h4 id="moving-on"><b>Moving on</b></h4>
+<p>I’ve tried to put together the fundamentals of <strong>ARKit</strong> in this part, and we’ll be going over more ARKit-y stuff in the coming parts. In the next part we’ll be discussing how to detect plane surfaces.</p>
+
+<p>Index of the series of ARKit posts:</p>
+<ul>
+  <li><a href="../posts/arkit-a-noobs-guide-part-one">Part I: Introducing ARKit</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-two">Part II: Detecting Planes</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-three">Part III: Adding 3D content to your scene</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-four">Part IV: Lighting with SceneKit</a></li>
+</ul>
+
+<p>That’s all folks.</p>
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=ARKit%3A+A+Noob%27s+Guide+-+Part+I - http://arvindravi.com/posts/arkit-a-noobs-guide-part-one by @arvindravi_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://arvindravi.com/posts/arkit-a-noobs-guide-part-one" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=http://arvindravi.com/posts/arkit-a-noobs-guide-part-one" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://arvindravi.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    © Arvind Ravi
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-37200107-6','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/assets/vendor-d95a8f71766d2efbcd7abf3bce924b22e1f6e46c0ce250b0abbdb19e1611dfb9.js"></script>
+
+
+
+  <script src="/assets/webfonts-b43bedd6aeaea7f39fa218abef200a1a7b9f319317a4a2c437eafba5cb04149d.js"></script>
+
+
+
+
+  <script src="/assets/scrollappear-be8da54bea4794209255bc7a9b8b2266fbd9d1db597964d66469f230dacf59f8.js"></script>
+
+
+
+<script src="/assets/application-a9813e7f426d2e264d63b6b67e8691cc3949233038e5df69736eebd0c28a6438.js"></script>
+
+
+</body>
+</html>

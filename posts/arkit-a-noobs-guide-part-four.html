@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Arvind Ravi | ARKit: A Noob's Guide - Part IV</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="ARKit: A Noob&#39;s Guide - Part IV">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://arvindravi.com/posts/arkit-a-noobs-guide-part-four">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Arvind Ravi">
+  <meta property="og:image" content="http://arvindravi.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://arvindravi.com/posts/arkit-a-noobs-guide-part-four">
+  <meta name="twitter:title" content="ARKit: A Noob&#39;s Guide - Part IV">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="http://arvindravi.com/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-1257007127614c626d7bbcd3bb62241c0f45a0cded0baacc45a03b27d61423c3.png">
+  <link href="http://arvindravi.com/feed.xml" type="application/rss+xml" rel="alternate" title="Arvind Ravi Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/assets/light-4f0137368429498e4edab07006e01c74914df7697c3e8b6cb3ec10fe1454720b.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/" class="header-logo" title="Arvind Ravi">Arvind Ravi</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/arvindravi_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://dribbble.com/arvindravi" rel="noreferrer noopener" target="_blank" title="Dribbble">
+          <span class="icon icon-dribbble"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:hello@arvindravi.com" title="Email">
+          <span class="icon icon-email"></span>
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>ARKit: A Noob's Guide - Part IV</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                October 31, 2017
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  7 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/swift">swift</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <h3 id="part-iv-lighting-with-scenekit">Part IV: Lighting with SceneKit💡</h3>
+
+<p>In the last few parts of the series, we’ve discussed how to setup an AR Session, detecting planes, and adding 3D objects to your session. To make your 3D content all better, we’ll work with lighting in this section.</p>
+
+<h4 id="fill--how"><strong>Fill — How?</strong></h4>
+<p>The 3D content, which are nothing but <code class="highlighter-rouge">SCNNode</code> objects that we add to the session, have an array property — <code class="highlighter-rouge">materials</code> that hold an array of <code class="highlighter-rouge">SCNMaterial</code> objects. To be able to fill an object with a solid color, all there is to do is:</p>
+
+<ul>
+  <li>Create a <code class="highlighter-rouge">SCNMaterial</code> object</li>
+  <li>Assign a color to its <code class="highlighter-rouge">diffuse</code> property</li>
+  <li>Add the created <code class="highlighter-rouge">SCNMaterial</code> object to the <code class="highlighter-rouge">materials</code> array of the <code class="highlighter-rouge">SCNNode</code></li>
+</ul>
+
+<p>And that’s all there is to it.</p>
+
+<p><strong>Code</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Cube Node</span>
+<span class="k">let</span> <span class="nv">boxGeometry</span> <span class="o">=</span> <span class="kt">SCNBox</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">chamferRadius</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">cube</span> <span class="o">=</span> <span class="kt">SCNNode</span><span class="p">(</span><span class="nv">geometry</span><span class="p">:</span> <span class="n">boxGeometry</span><span class="p">)</span>
+
+<span class="c1">// Material Object</span>
+<span class="k">let</span> <span class="nv">material</span> <span class="o">=</span> <span class="kt">SCNMaterial</span><span class="p">()</span>
+
+<span class="c1">// Assign a color to the material</span>
+<span class="n">material</span><span class="o">.</span><span class="n">diffuse</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="o">.</span><span class="n">blue</span>
+
+<span class="c1">// Add material to the cube node</span>
+<span class="n">cube</span><span class="o">.</span><span class="n">materials</span> <span class="o">=</span> <span class="p">[</span><span class="n">material</span><span class="p">]</span></code></pre></figure>
+
+<p>This piece of code should accomplish adding a fill to your node. Let’s look into how to add a light node to the scene.</p>
+
+<h4 id="lighting-with-scenekit"><strong>Lighting with SceneKit</strong></h4>
+<p>The primary premise around Augmenting Reality is that you add virtual objects to the real one, and the objects we add need to look and feel like they’re part of the actual space you’re interacting with. Lighting your objects right help you with this.</p>
+
+<p>Lighting adds a layer of realism to your 3D objects. With SceneKit, this is accomplished by adding <code class="highlighter-rouge">SCNLight</code> objects to your scene.</p>
+
+<p>There are different types of SCNLight, that can be used based on the kind of lighting you want in your scene:</p>
+
+<ul>
+  <li>Omni</li>
+  <li>Ambient</li>
+  <li>Directional</li>
+  <li>Spot</li>
+  <li>IES</li>
+  <li>Probe</li>
+</ul>
+
+<p>Using one or more lights in combination in your scene will give you all different kinds of interesting lighting.</p>
+
+<p>To light a 3D object in the scene, very simply, we need two types lights in the scene:</p>
+<ul>
+  <li>Spot (or) Directional Light</li>
+  <li>Ambient</li>
+</ul>
+
+<p>We add an Ambient light source to our scene because in real life, there are multiple light sources and light bounces of every surface lighting all sides of an object. We simulate this by adding an Ambient Light along with a Spot light or a Directional Light to light the object up.</p>
+
+<p><strong>Code</strong></p>
+
+<ol>
+1. Creating a Spot Light
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">spotLight</span> <span class="o">=</span> <span class="kt">SCNLight</span><span class="p">()</span>
+<span class="n">spotLight</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="o">.</span><span class="n">spot</span>
+<span class="n">spotLight</span><span class="o">.</span><span class="n">spotInnerAngle</span> <span class="o">=</span> <span class="mi">45</span>
+<span class="n">spotLight</span><span class="o">.</span><span class="n">spotOuterAngle</span> <span class="o">=</span> <span class="mi">45</span>
+<span class="n">spotLight</span><span class="o">.</span><span class="n">intensity</span> <span class="o">=</span> <span class="mi">40</span></code></pre></figure>
+
+
+2. Creating an Ambient Light
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">ambientLight</span> <span class="o">=</span> <span class="kt">SCNLight</span><span class="p">()</span>
+<span class="n">ambientLight</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="o">.</span><span class="n">ambient</span>
+<span class="n">ambientLight</span><span class="o">.</span><span class="n">intensity</span> <span class="o">=</span> <span class="mi">40</span></code></pre></figure>
+
+
+3. Adding them to your scene
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">sceneView</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">rootNode</span><span class="o">.</span><span class="nf">addChildNode</span><span class="p">(</span><span class="n">spotLight</span><span class="p">)</span>
+<span class="n">sceneView</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">rootNode</span><span class="o">.</span><span class="nf">addChildNode</span><span class="p">(</span><span class="n">ambientLight</span><span class="p">)</span></code></pre></figure>
+
+</ol>
+
+<p><code class="highlighter-rouge">SCNLight</code> has a property called <code class="highlighter-rouge">intensity</code> that signifies the luminous flux in lumens, or the total brightness of the light.</p>
+
+<p><code class="highlighter-rouge">SCNView</code> has a boolean property called <a href="https://developer.apple.com/documentation/arkit/arscnview/2887446-automaticallyupdateslighting"><code class="highlighter-rouge">automaticallyUpdatesLighting</code></a>, which when <code class="highlighter-rouge">true</code> adds an Omni lightsource to the scene pointing in the direction of the camera and sets its intensity to <code class="highlighter-rouge">1000</code> by default.</p>
+
+<p>We can manipulate realism, or how realistic an object is by actively controlling the intensity property of our lights in the scene. To be able to do this, let’s turn the default lighting off:</p>
+
+<p><code class="highlighter-rouge">sceneView.autoenablesDefaultLighting = false</code></p>
+
+<p>The <code class="highlighter-rouge">ARConfiguration</code> instance that we use to setup an <code class="highlighter-rouge">ARSession</code> has a boolean property called <a href="https://developer.apple.com/documentation/arkit/arconfiguration/2923546-islightestimationenabled"><code class="highlighter-rouge">lightEstimationEnabled</code></a>, which when true gives us a light estimate value of every <code class="highlighter-rouge">ARFrame</code> that’s captured. This is very useful because we can leverage the <a href="https://developer.apple.com/documentation/arkit/arframe/2878306-lightestimate"><code class="highlighter-rouge">lightEstimate</code></a> property to update our lights with the right intensity based on the environment.</p>
+
+<p><strong>Code</strong></p>
+<ol>
+1. Enabling  Light Estimation in the scene
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// AR Session Configuration: configuration</span>
+<span class="n">configuration</span><span class="o">.</span><span class="n">lightEstimationEnabled</span> <span class="o">=</span> <span class="kc">true</span></code></pre></figure>
+
+
+2. Using light estimates to update lighting
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">renderer</span><span class="p">(</span><span class="n">_</span> <span class="nv">renderer</span><span class="p">:</span> <span class="kt">SCNSceneRenderer</span><span class="p">,</span> <span class="n">updateAtTime</span> <span class="nv">time</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">guard</span> <span class="k">let</span> <span class="nv">lightEstimate</span> <span class="o">=</span> <span class="n">sceneView</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">currentFrame</span><span class="p">?</span><span class="o">.</span><span class="n">lightEstimate</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span> 
+  <span class="n">lightEstimate</span><span class="o">.</span><span class="n">ambientIntensity</span> <span class="n">gives</span> <span class="n">us</span> <span class="n">an</span> <span class="n">estimate</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">real</span> <span class="n">world</span> <span class="n">lighting</span>
+  <span class="n">spotLight</span><span class="o">.</span><span class="n">intensity</span> <span class="o">=</span> <span class="n">lightEstimate</span><span class="o">.</span><span class="n">ambientIntensity</span><span class="o">/</span><span class="mi">1000</span>
+<span class="p">}</span></code></pre></figure>
+
+</ol>
+
+<p>Using Light Estimation this way helps with realism to a certain extent, and works most times if the user is engaged within the experience in a well-lit environment.</p>
+
+<h4 id="advanced-lighting-with-scenekit-pbr"><strong>Advanced Lighting with SceneKit: PBR</strong></h4>
+
+<p>We have seen how to use basic lighting to light up your 3D objects, and make it look realistic. We can now go one step further with a technique called <strong>Physically Based Rendering</strong> to texture our objects and make it convincing.</p>
+
+<p><img src="https://i.imgur.com/1ObQtqv.png" alt="" /></p>
+
+<p>These are the different <a href="https://developer.apple.com/documentation/scenekit/scnmaterial.lightingmodel">lighting models</a> that we could use to light our objects up. We’ll look at how to use PBR to make a realistic looking objects.</p>
+
+<p>Simply put, <a href="https://developer.apple.com/documentation/scenekit/scnmaterial.lightingmodel/1640553-physicallybased">PBR lighting</a> leverages the following material properties to compute lighting and texture on the object:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">diffuse</code>:
+  The diffuse property provides the base color of the material. Also known as <em>albedo</em> in some authoring tools.</li>
+  <li><code class="highlighter-rouge">roughness</code>:
+  This provides an approximation of the microscopic detail in a real-world surface.</li>
+  <li><code class="highlighter-rouge">metalness</code>:
+  This provides an approximation of how shiny the material is going to be.</li>
+</ul>
+
+<p>More specifics on the lighting terms are described excellently <a href="https://developer.apple.com/documentation/scenekit/scnmaterial.lightingmodel/1640553-physicallybased">here</a>.</p>
+
+<p>The process to apply materials to SCNNode is similar to how we applied a fill in our object earlier, except for the PBR lighting we will be providing the relevant properties we discussed above.</p>
+
+<p>We provide texture maps to the properties <code class="highlighter-rouge">diffuse</code>, <code class="highlighter-rouge">roughness</code> and <code class="highlighter-rouge">metalness</code>  as an image. These texture maps can be found online, and some free ones at <a href="http://freepbr.com">FreePBR</a>.</p>
+
+<p><strong>Code</strong></p>
+<ol>
+1. Creating a material
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">material</span> <span class="o">=</span> <span class="kt">SCNMaterial</span><span class="p">()</span></code></pre></figure>
+
+
+2. Assigning Lighting Model and Texture maps
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">material</span><span class="o">.</span><span class="n">lightingModel</span> <span class="o">=</span> <span class="o">.</span><span class="n">physicallyBased</span>
+<span class="n">material</span><span class="o">.</span><span class="n">diffuse</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"albedo.png"</span><span class="p">)</span>
+<span class="n">material</span><span class="o">.</span><span class="n">roughness</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"roughness.png"</span><span class="p">)</span>
+<span class="n">material</span><span class="o">.</span><span class="n">metalness</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"metalness.png"</span><span class="p">)</span></code></pre></figure>
+
+
+3. Adding them to the object
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">cube</span><span class="o">.</span><span class="n">materials</span> <span class="o">=</span> <span class="p">[</span><span class="n">material</span><span class="p">]</span></code></pre></figure>
+
+
+<p>The final step is to tell your scene to use an environment map to figure out how to light the object based on its environment.</p>
+
+4. Using an environment map
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">env</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"environmentMap.png"</span><span class="p">)</span>
+ 
+<span class="c1">// Set Environment Map</span>
+<span class="n">sceneView</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">lightingEnvironment</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">env</span></code></pre></figure>
+
+
+<p>
+This process is similar to how we set a fill earlier and should be straightforward. The objects should look way better with this kind of lighting.
+
+Now to use the light estimates like earlier with PBR, we just set the `intensity` of the `lightingEnvironment` in the following method:
+
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">renderer</span><span class="p">(</span><span class="n">_</span> <span class="nv">renderer</span><span class="p">:</span> <span class="kt">SCNSceneRenderer</span><span class="p">,</span> <span class="n">updateAtTime</span> <span class="nv">time</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">)</span></code></pre></figure>
+
+
+The `lightingEnvironment` takes value of `1.0` for neutral and ARKit returns a value of `1000` to represent neutral lighting. So scaling this value is essential before assigning it to the lighting environment.
+</p>
+
+5. Using light estimates
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">intensity</span> <span class="o">=</span> <span class="n">lightEstimate</span><span class="o">.</span><span class="n">ambientIntensity</span> <span class="o">/</span> <span class="mf">1000.0</span> 
+
+<span class="c1">// Set intensity of the lighting environment</span>
+<span class="n">sceneView</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">lightingEnvironment</span><span class="o">.</span><span class="n">intensity</span> <span class="o">=</span> <span class="n">intensity</span></code></pre></figure>
+
+</ol>
+
+<p>This should already provide you convincing results with lighting your objects.</p>
+
+<p>Note: After having used this, I’ve obtained some good results although I came across this note on the documentation which says SceneKit falls back to the .blinn lighting model if the <code class="highlighter-rouge">renderingAPI</code> is not metal. Feel free to try it out and see what works best for you.</p>
+
+<p><img src="https://i.imgur.com/3mNMX7J.png" alt="" /></p>
+
+<h4 id="moving-on"><strong>Moving On</strong></h4>
+
+<p>With that, the series on ARKit comes to an end.</p>
+
+<p>Sorry for the delay in finishing this series, I’ve been busy with an <a href="http://itunes.apple.com/us/app/artx/id1296941506?ls=1&amp;mt=8">AR app</a> that I’ve been working on. Do check it out!</p>
+
+<p>Thanks for following along, I hope the series helped understand how ARKit works and how to get things going at your end. Feel free to leave any comments and feedback!</p>
+
+<p>Index of the series of ARKit posts:</p>
+<ul>
+  <li><a href="../posts/arkit-a-noobs-guide-part-one">Part I: Introducing ARKit</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-two">Part II: Detecting Planes</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-three">Part III: Adding 3D content to your scene</a></li>
+  <li><a href="../posts/arkit-a-noobs-guide-part-four">Part IV: Lighting with SceneKit</a></li>
+</ul>
+
+<hr />
+
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=ARKit%3A+A+Noob%27s+Guide+-+Part+IV - http://arvindravi.com/posts/arkit-a-noobs-guide-part-four by @arvindravi_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://arvindravi.com/posts/arkit-a-noobs-guide-part-four" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=http://arvindravi.com/posts/arkit-a-noobs-guide-part-four" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://arvindravi.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    © Arvind Ravi
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-37200107-6','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/assets/vendor-d95a8f71766d2efbcd7abf3bce924b22e1f6e46c0ce250b0abbdb19e1611dfb9.js"></script>
+
+
+
+  <script src="/assets/webfonts-b43bedd6aeaea7f39fa218abef200a1a7b9f319317a4a2c437eafba5cb04149d.js"></script>
+
+
+
+
+  <script src="/assets/scrollappear-be8da54bea4794209255bc7a9b8b2266fbd9d1db597964d66469f230dacf59f8.js"></script>
+
+
+
+<script src="/assets/application-a9813e7f426d2e264d63b6b67e8691cc3949233038e5df69736eebd0c28a6438.js"></script>
+
+
+</body>
+</html>
